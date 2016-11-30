@@ -42,7 +42,7 @@ class GetCpuDataThread(threading.Thread):
             current_page, cpudata = AndroidUtil.get_cpu_data(pkgName)#当前采集到的数据
             if cpudata >= 50.00:
                 self.CPUerror.append([current_page, cpudata])
-                AdbUtil.screenshot()
+                AdbUtil.screenshot('cpu')
             else:
                 pass
             self.CPUdata.append([current_page, cpudata])

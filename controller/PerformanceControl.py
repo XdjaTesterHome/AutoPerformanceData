@@ -4,10 +4,12 @@ import common.GlobalConfig as config
 from util.LogUtil import LogUtil
 from util.AndroidUtil import AndroidUtil
 from util.AdbUtil import AdbUtil
+from monkey.Monkey import Monkey
 
 import time
 import re
 import subprocess
+
 __author__ = 'zhouliwei'
 
 """
@@ -18,7 +20,6 @@ date:2016/11/30
 
 
 class PerformanceControl(object):
-
     # 用于存放搜集的数据
     cpu_datas = []
     flow_datas = []
@@ -27,12 +28,15 @@ class PerformanceControl(object):
     memory_datas = []
     battery_datas = []
 
+    METHOD_ARRAY = ['cpu', 'memory', 'kpi', 'fps', 'flow']
+
     def __init__(self):
         pass
 
     """
         用于获取cpu数据
     """
+
     @staticmethod
     def get_cpu_data(package_name, pic_name='cpu'):
         i = 0
@@ -52,6 +56,7 @@ class PerformanceControl(object):
     """
         用于获取流量数据
     """
+
     @staticmethod
     def get_flow_data(package_name, pic_name='flow'):
         # 处理有问题的流量数据，暂定有问题的流量是大于1M时
@@ -98,6 +103,7 @@ class PerformanceControl(object):
         @:param package_name 当前的包名
         @:param pic_name  出问题时保存的图片名称
     """
+
     @staticmethod
     def get_fps_data(package_name, pic_name='fps'):
         # 处理可能有问题的场景
@@ -136,6 +142,7 @@ class PerformanceControl(object):
         @:param package_name 当前的包名
         @:param pic_name  出问题时保存的包名
     """
+
     @staticmethod
     def get_kpi_data(package_name, pic_name='kpi'):
         # 处理异常的kpi数据,当跳转时间大于3s（暂定）
@@ -171,11 +178,11 @@ class PerformanceControl(object):
         jump_page = ''
         cost_time = ''
         now_page_name = ''
+        # 采集数据的次数
+        get_count = 0
         while True:
             LogUtil.log_i('get kpi data')
-            # 1. 根据时间判断是否结束
-            now_time = time.mktime(time.localtime())
-            if now_time - start_time > config.collect_data_time:
+            if get_count > config.collect_data_count:
                 if results.poll() is None:
                     print 'results.terminate()'
                     results.stdout.close()
@@ -207,12 +214,14 @@ class PerformanceControl(object):
 
             # 将结果保存到数组中
             if now_page_name is not None and jump_page is not None and cost_time is not None:
-                PerformanceControl.kpi_datas.append([now_page_name, jump_page, cost_time])
+                PerformanceControl.kpi_datas.append([now_page_name, jump_page, handle_cost_time(cost_time)])
                 handle_error_data(cost_time)
+            get_count += 1
 
     """
         用于获取内存的数据
     """
+
     @staticmethod
     def get_memory_data(package_name, pic_name='memory'):
         i = 0
@@ -233,6 +242,7 @@ class PerformanceControl(object):
                 last_page_name = now_page_name
             else:
                 last_memory_data = memory_data
+                i += 1
                 continue
             # 内存增量大于某个值就认为是有问题
             if memory_increase >= 10 * 1024:
@@ -245,7 +255,31 @@ class PerformanceControl(object):
             i += 1
 
     """
+        用于跑monkey
+    """
+
+    @staticmethod
+    def run_monkey(time, package_name):
+        LogUtil.log_i('begin exec monkey')
+        Monkey.run_monkey(time, package_name)
+        LogUtil.log_i('monkey exec success')
+
+    """
         用于处理电量相关的数据
     """
+
     def get_battery_data(self, package_name, pic_name='battery'):
         pass
+
+    @staticmethod
+    def get_data(methodType, package_name):
+        if methodType == PerformanceControl.METHOD_ARRAY[0]:
+            PerformanceControl.get_cpu_data(package_name)
+        elif methodType == PerformanceControl.METHOD_ARRAY[1]:
+            PerformanceControl.get_memory_data(package_name)
+        elif methodType == PerformanceControl.METHOD_ARRAY[2]:
+            PerformanceControl.get_kpi_data(package_name)
+        elif methodType == PerformanceControl.METHOD_ARRAY[3]:
+            PerformanceControl.get_fps_data(package_name)
+        elif methodType == PerformanceControl.METHOD_ARRAY[4]:
+            PerformanceControl.get_flow_data(package_name)

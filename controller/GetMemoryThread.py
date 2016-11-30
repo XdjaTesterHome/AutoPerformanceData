@@ -6,6 +6,8 @@ import  threading
 import time
 from util.AndroidUtil import AndroidUtil
 from util.AdbUtil import AdbUtil
+from util.LogUtil import LogUtil
+import common.GlobalConfig as config
 """
 function: 采集内存数据的逻辑
 date:2016/11/23
@@ -45,7 +47,7 @@ class GetMemoryDataThread(threading.Thread):
             if memorydata >= 50*1024:
                 memoryerror = memorydata
                 self.Memoryerror.append(memoryerror)
-                AdbUtil.screenshot()
+                AdbUtil.screenshot('memory')
                 LogUtil.log_i('Inspect memory 12')
             LogUtil.log_i('Inspect memory 13')
             self.Memorydata.append(memorydata)

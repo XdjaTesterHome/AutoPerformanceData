@@ -1,18 +1,30 @@
 {% extends "base.html" %}
 {% block bodycontent %}
-
-    <script type="text/javascript">
-            alert('111');
-            alert('222');
-            var fps_list = {{ fps_list|safe }}
-            alert(fps_list)
-    </script>
-
+<script>
+ function add(){
+    var fps_list ={{ fps_list|safe }}
+    var tbl = document.getElementById("tad");
+    for (var i=0;i< fps_list.length;i++){
+        var obj = tbl.insertRow(tbl.rows.length);
+        obj.insertCell().innerHTML = fps_list[i][0];
+        obj.insertCell().innerHTML = fps_list[i][1];
+        obj.insertCell().innerHTML = fps_list[i][2];
+ }
+    var rows = tbl.getElementsByTagName("tr");
+    for (var j=0;j<rows.length-1;j++){
+        if (fps_list[j][1] <=30 || fps_list[j][2]>=3){
+             rows[j+1].style.color = "#f00";
+ }
+}
+}
+</script>
+<body onLoad="add()">
+<h1 id=></h1>
     <table width="70%" border="1px" id="tad" >
        <tr>
            <th>当前页面</th>
            <th>平均fps值</th>
            <th>平均丢帧数</th>
        </tr>
-    </table>
+     </table>
 {% endblock %}

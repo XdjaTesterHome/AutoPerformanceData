@@ -84,7 +84,7 @@ class CpuData(models.Model):
         for key in cpu_keys:
             value = cpu_data_dict.get(key)
             cpu_list_to_insert.append(
-                FpsData(currentPage=key, cpu=value, packageName=package_name,
+                CpuData(currentPage=key, cpu=value, packageName=package_name,
                         versionCode=version_code))
 
         CpuData.objects.bulk_create(cpu_list_to_insert)
@@ -97,7 +97,7 @@ class CpuData(models.Model):
         cpu_data_list = CpuData.objects.all()
         result_cpu_list = []
         for cpu_data in cpu_data_list:
-            result_cpu_list.append([cpu_data.currentPage, cpu_data.fps])
+            result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
         return result_cpu_list
 
 
@@ -133,7 +133,7 @@ class KpiData(models.Model):
                 KpiData(currentPage=key, kpi=value, packageName=package_name,
                         versionCode=version_code))
 
-        CpuData.objects.bulk_create(kpi_list_to_insert)
+        KpiData.objects.bulk_create(kpi_list_to_insert)
 
     """
         获取所有的数据
@@ -183,7 +183,7 @@ class MemoryData(models.Model):
                 MemoryData(currentPage=key, lastPage=value[1], memory_increase=value[0], packageName=package_name,
                            versionCode=version_code))
 
-        CpuData.objects.bulk_create(memory_list_to_insert)
+        MemoryData.objects.bulk_create(memory_list_to_insert)
 
     """
         获取所有的数据
@@ -233,7 +233,7 @@ class FlowData(models.Model):
                 FlowData(currentPage=key, lastPage=value[1], flowIncrease=value[0], packageName=package_name,
                          versionCode=version_code))
 
-        CpuData.objects.bulk_create(flow_list_to_insert)
+        FlowData.objects.bulk_create(flow_list_to_insert)
 
     """
         获取所有的数据

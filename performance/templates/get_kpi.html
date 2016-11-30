@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block bodycontent %}
+<script>
+ function add(){
+    var Kpi_list = {{ Kpi_list|safe }}
+    var tbl = document.getElementById("tad");
+    for (var i=0;i<Kpi_list.length;i++){
+    var obj = tbl.insertRow(tbl.rows.length);
+    obj.insertCell().innerHTML = Kpi_list[i][0];
+    obj.insertCell().innerHTML = Kpi_list[i][1];
+ }
+    var rows = tbl.getElementsByTagName("tr");
+    for (var j=0;j<rows.length-1;j++){
+        if (Kpi_list[j][1] >=50.00){
+             rows[j+1].style.color = "#f00";
+ }
+}
+}
+</script>
+<body onLoad="add()">
+<h1 id=></h1>
+    <table width="70%" border="1px" id="tad" >
+       <tr>
+           <th>当前页面</th>
+           <th>加载时间(ms)</th>
+       </tr>
+     </table>
+{% endblock %}

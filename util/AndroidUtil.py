@@ -51,7 +51,7 @@ class AndroidUtil(object):
         cpuUsage = float((_end1-_start1))/(_end0-_start0)*100#计算当前用户进程CPU的值
         CPU=(float('%.2f'%cpuUsage))#当前被监控应用CPU的值
         current_page = AndroidUtil.get_cur_activity()
-        return CPU
+        return CPU, current_page
         pass
 
     """

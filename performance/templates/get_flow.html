@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block bodycontent %}
+<script>
+ function add(){
+    var Flow_list = {{ Flow_list|safe }}
+    var tbl = document.getElementById("tad");
+    for (var i=0;i<Flow_list.length;i++){
+        var obj = tbl.insertRow(tbl.rows.length);
+        obj.insertCell().innerHTML = Flow_list[i][0];
+        obj.insertCell().innerHTML = Flow_list[i][1];
+        obj.insertCell().innerHTML = Flow_list[i][1];
+ }
+    var rows = tbl.getElementsByTagName("tr");
+    for (var j=0;j<rows.length-1;j++){
+        if (Flow_list[j][2] >=100.00){
+             rows[j+1].style.color = "#f00";
+ }
+}
+}
+</script>
+<body onLoad="add()">
+<h1 id=></h1>
+    <table width="70%" border="1px" id="tad" >
+       <tr>
+           <th>当前页面</th>
+           <th>上一页面</th>
+           <th>消耗流量(KB)</th>
+       </tr>
+     </table>
+{% endblock %}
