@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block bodycontent %}
+
+    <script type="text/javascript">
+            alert('111');
+            alert('222');
+            var fps_list = {{ fps_list|safe }}
+            alert(fps_list)
+    </script>
+
+    <table width="70%" border="1px" id="tad" >
+       <tr>
+           <th>当前页面</th>
+           <th>平均fps值</th>
+           <th>平均丢帧数</th>
+       </tr>
+    </table>
+{% endblock %}
