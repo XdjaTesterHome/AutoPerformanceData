@@ -21,20 +21,13 @@ class GetFpsDataThread(threading.Thread):
     # 存放采集到的帧率数据['frame_count', 'jank_count', 'fps', 'page']
     fps_datas = []
 
-    # 存放有问题的帧率数据['frame_count', 'jank_count', 'fps', 'page', 'pic_name']
-    fps_error_datas = []
-
-    # 任务是否完成
-    task_finish = False
-
-    def __init__(self, thread_id, package_name):
+    def __init__(self, thread_id, package_name, pic_name='fps'):
         threading.Thread.__init__(self)
         self.threadId = thread_id
         self.package_name = package_name
-        self.pic_name = 'fps'
+        self.pic_name = pic_name
         # 每次采集数据前，先清理上次的数据
         GetFpsDataThread.clear_data()
-        GetFpsDataThread.task_finish = False
 
     """
         采集数据的逻辑
@@ -47,8 +40,6 @@ class GetFpsDataThread(threading.Thread):
                 # 截图
                 AdbUtil.screenshot(self.pic_name)
                 # 保存日志
-
-                GetFpsDataThread.fps_error_datas.append([frame_count, jank_count, fps, current_page, self.pic_name])
 
         # 死循环，满足条件后跳出
         exec_count = 0
@@ -72,7 +63,6 @@ class GetFpsDataThread(threading.Thread):
 
             # 采集数据时间间隔
             time.sleep(config.collect_data_interval)
-        GetFpsDataThread.task_finish = True
 
     """
         用于清理数据
@@ -80,7 +70,6 @@ class GetFpsDataThread(threading.Thread):
     @staticmethod
     def clear_data():
         GetFpsDataThread.fps_datas = []
-        GetFpsDataThread.fps_error_datas = []
 
 
 if __name__ == '__main__':

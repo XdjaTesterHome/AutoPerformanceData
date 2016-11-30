@@ -51,7 +51,7 @@ class AndroidUtil(object):
         cpuUsage = float((_end1-_start1))/(_end0-_start0)*100#计算当前用户进程CPU的值
         CPU=(float('%.2f'%cpuUsage))#当前被监控应用CPU的值
         current_page = AndroidUtil.get_cur_activity()
-        return CPU, current_page
+        return current_page, CPU
         pass
 
     """
@@ -302,7 +302,8 @@ class AndroidUtil(object):
         用于获取应用的versioncode
         通过执行adb shell dumpsys package com.xxx.xxx来获得
     """
-    def get_versioncode(self, package_name):
+    @staticmethod
+    def get_versioncode(package_name):
         try:
             cmd = 'dumpsys package %s | findStr versionName' % package_name
             process_result = AdbUtil.exec_adb_shell(cmd)

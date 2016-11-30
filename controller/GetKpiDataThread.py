@@ -22,9 +22,6 @@ class GetKpiDataThread(threading.Thread):
     # 用于收集kpi的数据
     kpi_datas = []
 
-    # 用于收集kpi异常的数据
-    kpi_error_datas = []
-
     # 当前页面名称
     now_page_name = ''
 
@@ -34,17 +31,13 @@ class GetKpiDataThread(threading.Thread):
     # 跳转花费时间
     cost_time = ''
 
-    # 任务是否执行完成
-    task_finish = False
-
-    def __init__(self, thread_id, package_name):
+    def __init__(self, thread_id, package_name, pic_name='kpi'):
         threading.Thread.__init__(self)
         self.threadID = thread_id
         self.package_name = package_name
-        self.pic_name = 'kpi'
+        self.pic_name = pic_name
         # 每次执行数据先清空之前的数据
         GetKpiDataThread.clear_data()
-        GetKpiDataThread.task_finish = False
 
     """
         循环获取kpi数据的逻辑
@@ -82,11 +75,10 @@ class GetKpiDataThread(threading.Thread):
             log.log_e('get kpi failure ' + e.message)
 
         # 这里的逻辑是采集一定时间的数据之后，结束进程
+        exect_count = 0
         while True:
             log.log_i('get kpi data')
-            # 1. 根据时间判断是否结束
-            now_time = time.mktime(time.localtime())
-            if now_time - start_time > config.collect_data_time:
+            if exect_count > config.collect_data_count:
                 if results.poll() is None:
                     print 'results.terminate()'
                     results.stdout.close()
@@ -121,7 +113,7 @@ class GetKpiDataThread(threading.Thread):
                 GetKpiDataThread.kpi_datas.append([self.now_page_name, self.jump_page, self.cost_time])
                 handle_error_data()
 
-        GetKpiDataThread.task_finish = True
+            exect_count += 1
 
     """
         用于清理数据
@@ -129,7 +121,8 @@ class GetKpiDataThread(threading.Thread):
     @staticmethod
     def clear_data():
         GetKpiDataThread.kpi_datas = []
-        GetKpiDataThread.kpi_error_datas = []
+
+
 if __name__ == '__main__':
     kpi_thread = GetKpiDataThread(102, 'com.xdja.safekeyservice')
     kpi_thread.start()

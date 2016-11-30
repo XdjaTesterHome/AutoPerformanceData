@@ -3,7 +3,6 @@
 from CollectData import CollectData
 from PublishData import PublishData
 import common.GlobalConfig as config
-from controller.RunMonkeyThread import RunMonkeyThread
 from util.LogUtil import LogUtil
 
 __author__ = 'zhouliwei'
@@ -28,20 +27,17 @@ def main_entrance():
     if not can_collect:
         print tip_message
         return
-    # 2. 开启monkey
-    monkey_thread = RunMonkeyThread(config.test_package_name, run_monkey_count)
-    monkey_thread.start()
 
-    # 3. 开始采集数据的逻辑
-    CollectData().auto_collect_data_process()
+    # 2. 开始采集数据的逻辑
+    CollectData().auto_collect_data()
 
     LogUtil.log_i('pre_process_data......')
-    # # 4. 处理采集到的数据
-    # CollectData().pre_process_data()
-    #
-    # LogUtil.log_i('publish_data......')
-    # # 5. 对处理之后的数据，写到db中
-    # PublishData.publish_data()
+    # 3. 处理采集到的数据
+    CollectData().pre_process_data()
+
+    LogUtil.log_i('publish_data......')
+    # 4. 对处理之后的数据，写到db中
+    PublishData.publish_data()
 
     LogUtil.log_i('performance data collect success')
 

@@ -194,7 +194,7 @@ class MemoryData(models.Model):
         memory_data_list = MemoryData.objects.all()
         result_memory_list = []
         for memory_data in memory_data_list:
-            result_memory_list.append([memory_data.currentPage, memory_data.lastPage, memory_data.memory])
+            result_memory_list.append([memory_data.currentPage, memory_data.lastPage, memory_data.memory_increase])
         return result_memory_list
 
 
