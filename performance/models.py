@@ -49,7 +49,7 @@ class FpsData(models.Model):
 
     def get_all_data(self):
         fps_data_list = FpsData.objects.all()
-        result_fps_list = []
+        result_fps_list = [[u'当前页面', u'平均fps值', u'平均丢帧数目']]
         for fps_data in fps_data_list:
             result_fps_list.append([fps_data.currentPage, fps_data.fps, fps_data.jankCount])
         return result_fps_list
@@ -95,7 +95,7 @@ class CpuData(models.Model):
 
     def get_all_data(self):
         cpu_data_list = CpuData.objects.all()
-        result_cpu_list = []
+        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
         for cpu_data in cpu_data_list:
             result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
         return result_cpu_list
@@ -142,7 +142,7 @@ class KpiData(models.Model):
 
     def get_all_data(self):
         kpi_data_list = KpiData.objects.all()
-        result_kpi_list = []
+        result_kpi_list = [[u'当前页面', u'加载时间']]
         for kpi_data in kpi_data_list:
             result_kpi_list.append([kpi_data.currentPage, kpi_data.kpi])
         return result_kpi_list
@@ -192,7 +192,7 @@ class MemoryData(models.Model):
 
     def get_all_data(self):
         memory_data_list = MemoryData.objects.all()
-        result_memory_list = []
+        result_memory_list = [[u'当前页面', u'上一页面', u'内存增量']]
         for memory_data in memory_data_list:
             result_memory_list.append([memory_data.currentPage, memory_data.lastPage, memory_data.memory_increase])
         return result_memory_list
@@ -242,7 +242,7 @@ class FlowData(models.Model):
 
     def get_all_data(self):
         flow_data_list = FlowData.objects.all()
-        result_flow_list = []
+        result_flow_list = [[u'当前页面', u'上一页面', u'流量增量']]
         for flow_data in flow_data_list:
             result_flow_list.append([flow_data.currentPage, flow_data.lastPage, flow_data.flowIncrease])
         return result_flow_list

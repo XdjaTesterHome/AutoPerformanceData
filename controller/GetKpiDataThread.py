@@ -50,7 +50,6 @@ class GetKpiDataThread(threading.Thread):
                 cost_time_value = handle_cost_time(self.cost_time)
                 if cost_time_value > 3000:
                     AdbUtil.screenshot(self.pic_name)
-                    GetKpiDataThread.kpi_error_datas.append([self.now_page_name, self.jump_page, self.cost_time, self.pic_name])
 
         # 因为从日志中得到的值都是 +345ms 或者 +1s234ms
         def handle_cost_time(cost_time):
@@ -110,7 +109,7 @@ class GetKpiDataThread(threading.Thread):
 
             # 将结果保存到数组中
             if self.now_page_name is not None and self.jump_page is not None and self.cost_time is not None:
-                GetKpiDataThread.kpi_datas.append([self.now_page_name, self.jump_page, self.cost_time])
+                GetKpiDataThread.kpi_datas.append([self.now_page_name, self.jump_page, handle_cost_time(self.cost_time)])
                 handle_error_data()
 
             exect_count += 1

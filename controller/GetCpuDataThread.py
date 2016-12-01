@@ -31,9 +31,11 @@ class GetCpuDataThread(threading.Thread):
         获取cpu数据的逻辑
     """
     def run(self):
-        i = 0
-        while i < config.collect_data_count:
+        exec_count = 0
+        while True:
             LogUtil.log_i('Inspect cpu')
+            if exec_count > config.collect_data_count:
+                break
             current_page, cpu_datas = AndroidUtil.get_cpu_data(self.package_name)#当前采集到的数据
             if cpu_datas >= 50.00:
                 # 对错误进行处理
@@ -43,7 +45,7 @@ class GetCpuDataThread(threading.Thread):
             GetCpuDataThread.cpu_datas.append([current_page, cpu_datas])
             # 设定多久采集一次数据
             time.sleep(config.collect_data_interval)
-            i += 1
+            exec_count += 1
         LogUtil.log_i('Inspect cpu finish')
 
     """

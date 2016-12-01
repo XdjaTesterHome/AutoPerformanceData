@@ -76,7 +76,7 @@ class PublishData(object):
 
     @staticmethod
     def __publish_flow_data(flow_data_fict, package_name, version_code):
-        MemoryData().save_db_data(flow_data_fict, package_name, version_code)
+        FlowData().save_db_data(flow_data_fict, package_name, version_code)
 
 if __name__ == '__main__':
     print AndroidUtil.get_versioncode(config.test_package_name)

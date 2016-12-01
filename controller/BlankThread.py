@@ -18,9 +18,9 @@ class BlankThread(threading.Thread):
 
     def run(self):
         print 'Blank thread'
-        count = 0
-        while True:
-            if count < config.collect_data_count:
-                break
-            print 'blank do nothing'
-            count += 1
+        # count = 0
+        # while True:
+        #     if count < config.collect_data_count:
+        #         break
+        #     print 'blank do nothing'
+        #     count += 1
