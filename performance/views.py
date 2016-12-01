@@ -8,6 +8,7 @@ from django.http import HttpResponse
 # Create your views here.
 import main.MainEntrance as Main
 
+
 def home(request):
     return render(request, 'home.html')
 
@@ -45,6 +46,12 @@ def get_kpi(request):
 def get_power(request):
     return render(request, 'get_power.html')
 
+#get_test方法用于前端网页调试#
+def get_test(request):
+    if request.method == "POSt":
+       import tests
+    return render(request, 'test.html')
+
 
 """
     开始进行测试
@@ -54,8 +61,8 @@ def get_power(request):
 def start_run_test(request):
     # 开始进行测试
     Main.start_test_task()
-
-    return HttpResponse('True')
+    return render(request, 'get_fps.html')
+    # return HttpResponse('True'), render(request, 'get_fps.html')
 
 
 """
@@ -66,8 +73,8 @@ def start_run_test(request):
 def stop_run_test(request):
     # 开始进行测试
     Main.set_test_finish()
-
-    return HttpResponse('True')
+    return render(request, 'get_fps.html')
+    # return HttpResponse('True'), render(request, 'get_fps.html')
 
 """
     开始进行测试
