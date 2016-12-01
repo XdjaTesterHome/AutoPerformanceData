@@ -17,4 +17,8 @@ urlpatterns = [
     url(r'^getFlow/', views.get_flow, name='flow_info'),
     url(r'^getKpi/', views.get_kpi, name='kpi_info'),
     url(r'^getPower/', views.get_power, name='battery_info'),
+    url(r'^startRunTest/', views.start_run_test, name='start_test'),
+    url(r'^stopRunTest/', views.stop_run_test, name='stop_test'),
+    url(r'^startSilentTest/', views.start_silent_test, name='start_silent_test'),
+    url(r'^stopSilentTest/', views.stop_silent_test, name='stop_silent_test'),
 ]

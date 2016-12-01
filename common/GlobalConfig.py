@@ -25,3 +25,13 @@ retry_count = 100
 
 # 要测试的App的包名
 test_package_name = 'com.xdja.HDSafeEMailClient'
+
+# 是否结束的标志
+run_finish = False
+
+class SlientState:
+    NOT_START = 0
+    START = 1
+    FINISH = 2
+# 静默状态测试
+run_silent_state = SlientState.NOT_START

@@ -4,11 +4,13 @@
 from django.shortcuts import render
 from models import *
 import json
+from django.http import HttpResponse
 # Create your views here.
-
+import main.MainEntrance as Main
 
 def home(request):
     return render(request, 'home.html')
+
 
 """
 用于获取fps数据
@@ -42,3 +44,49 @@ def get_kpi(request):
 
 def get_power(request):
     return render(request, 'get_power.html')
+
+
+"""
+    开始进行测试
+"""
+
+
+def start_run_test(request):
+    # 开始进行测试
+    Main.start_test_task()
+
+    return HttpResponse('True')
+
+
+"""
+    停止进行测试
+"""
+
+
+def stop_run_test(request):
+    # 开始进行测试
+    Main.set_test_finish()
+
+    return HttpResponse('True')
+
+"""
+    开始进行测试
+"""
+
+
+def start_silent_test(request):
+    # 开始进行测试
+    Main.start_silent_test()
+
+    return HttpResponse('True')
+
+"""
+    开始进行测试
+"""
+
+
+def stop_silent_test(request):
+    # 开始进行测试
+    Main.set_silent_test_finish()
+
+    return HttpResponse('True')

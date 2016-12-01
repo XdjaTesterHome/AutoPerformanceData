@@ -236,6 +236,22 @@ class FlowData(models.Model):
         FlowData.objects.bulk_create(flow_list_to_insert)
 
     """
+          批量的保存数据
+    """
+
+    def save_db_data_silent(self, flow_data_dict, package_name, version_code):
+        flow_list_to_insert = []
+        flow_keys = flow_data_dict.keys()
+        if len(flow_keys) <= 0:
+            return
+        for key in flow_keys:
+            value = flow_data_dict.get(key)
+            flow_list_to_insert.append(
+                FlowData(currentPage=key,  flowIncrease=value, packageName=package_name,
+                         versionCode=version_code))
+
+        FlowData.objects.bulk_create(flow_list_to_insert)
+    """
         获取所有的数据
         界面暂时只展示页面和flow数据
     """

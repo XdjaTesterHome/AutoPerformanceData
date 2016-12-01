@@ -318,6 +318,14 @@ class AndroidUtil(object):
             log.log_e('get process alive failure' + e.message)
             return '0.0.0.0'
 
+    """
+        让app静默
+    """
+    @staticmethod
+    def make_app_silent():
+        AdbUtil.press_home()
+        AdbUtil.press_power_key()
+
 if __name__ == '__main__':
     print  AndroidUtil().get_cpu_data("com.xdja.safekeyservice")
 

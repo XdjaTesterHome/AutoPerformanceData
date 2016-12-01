@@ -25,6 +25,7 @@ class PreProcessData(object):
 
     # 用于存放计算之后的flow值
     flow_data_dict = {}
+    flow_silent_data_dict = {}
 
     def __init__(self):
         pass
@@ -129,13 +130,10 @@ class PreProcessData(object):
             now_page_name = memory_data[0]
             if PreProcessData.memory_data_dict.has_key(now_page_name):
                 memory_value = PreProcessData.memory_data_dict.get(now_page_name)
-                if now_page_name == last_page_name:
-                    continue
-                # 假如是从同一个页面跳转过来的
-                if memory_value[1] == memory_data[1]:
+                if memory_data[1] == memory_value[1]:
                     if memory_data[2] != '':
                         last_memory_increase = memory_value[0]
-                        now_memory_increase = (int(last_memory_increase) + memory_data[2]) / 2
+                        now_memory_increase = (int(last_memory_increase) + memory_data[2]) / 2.0
                         last_page_name = memory_value[1]
                 else:
                     now_memory_increase = memory_data[2]
@@ -177,6 +175,30 @@ class PreProcessData(object):
             PreProcessData.flow_data_dict[now_page_name] = [now_flow, last_page_name]
 
     """
+        用于处理流量值
+        数据格式是：[[now_page, last_page, 流量增量]]
+    """
+
+    @staticmethod
+    def __pre_silent_flow_data(flow_datas):
+        if len(flow_datas) < 1:
+            return
+        for flow_data in flow_datas:
+            if len(flow_data) < 1:
+                continue
+
+            now_page_name = flow_data[0]
+            if PreProcessData.flow_silent_data_dict.has_key(now_page_name):
+                flow_value = PreProcessData.flow_silent_data_dict.get(now_page_name)
+                # 同样的逻辑，参考内存的计算方式
+                last_flow = flow_value[0]
+                now_flow = (int(last_flow) + flow_data[1]) / 2
+            else:
+                now_flow = int(flow_data[1])
+
+            PreProcessData.flow_silent_data_dict[now_page_name] = now_flow
+
+    """
           用于对收集的数据进行预处理
           预处理的规则：对同一类数据，筛选出同一页面的数据，做平均值。
     """
@@ -187,3 +209,12 @@ class PreProcessData(object):
         PreProcessData.__pre_flow_data(collect.flow_datas)
         PreProcessData.__pre_kpi_data(collect.kpi_datas)
         PreProcessData.__pre_memory_data(collect.memory_datas)
+
+    """
+          用于对收集的数据进行预处理
+          预处理的规则：对同一类数据，筛选出同一页面的数据，做平均值。
+    """
+    def pre_silent_process_data(self):
+        # 处理收集到的数据
+        PreProcessData.__pre_cpu_data(collect.cpu_datas)
+        PreProcessData.__pre_flow_data(collect.flow_datas)

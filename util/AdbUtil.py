@@ -3,7 +3,7 @@
 __author__ = 'zhouliwei'
 
 import os, re, time
-import subprocess
+from LogUtil import LogUtil
 PATH = lambda p: os.path.abspath(p)
 """
 function: 处理和adb命令相关的工具类
@@ -173,6 +173,50 @@ class AdbUtil(object):
             print e
             result = 0
         return result
+
+
+    """
+        模拟双击back事件
+        注意：keycode_home 3
+             keycode_call 5
+             keycode_menu 1
+    """
+    @staticmethod
+    def double_click_back():
+        try:
+            cmd = 'adb shell input keyevent 4'
+            i = 0
+            while i < 1:
+                os.system(cmd)
+                i += 1
+
+        except Exception,e:
+            LogUtil.log_e(e.message)
+
+    """
+        按电源键
+    """
+    @staticmethod
+    def press_power_key():
+        try:
+            cmd = 'adb shell input keyevent 26'
+            os.system(cmd)
+
+        except Exception, e:
+            LogUtil.log_e(e.message)
+
+    """
+        按手机的物理按键
+    """
+    @staticmethod
+    def press_home():
+        try:
+            cmd = 'adb shell input keyevent 3'
+            os.system(cmd)
+
+        except Exception, e:
+            LogUtil.log_e(e.message)
+
 
 
 if __name__ == '__main__':

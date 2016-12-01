@@ -6,7 +6,6 @@ import subprocess
 import time
 
 import common.GlobalConfig as config
-from controller.PerformanceControl import PerformanceControl as control
 from monkey.Monkey import Monkey
 from util.AdbUtil import AdbUtil
 from util.AndroidUtil import AndroidUtil
@@ -31,8 +30,10 @@ flow_datas = []
 fps_datas = []
 kpi_datas = []
 memory_datas = []
+flow_datas_silent = []
 
 METHOD_ARRAY = ['cpu', 'memory', 'kpi', 'fps', 'flow', 'monkey']
+SILENT_ARRAY = ['cpu', 'flow']
 
 """
        用于验证多进程自动收集数据
@@ -46,8 +47,8 @@ def auto_collect_data_process():
         pool = multiprocessing.Pool(processes=6)
         # result = pool.apply_async(run_monkey, (config.test_package_name(), RUN_MONKEY_COUNT,))
         result = None
-        for i in range(len(control.METHOD_ARRAY)):
-            result = pool.apply_async(get_data, (control.METHOD_ARRAY[i],))
+        for i in range(len(METHOD_ARRAY)):
+            result = pool.apply_async(get_data, (METHOD_ARRAY[i],))
         pool.close()
         pool.join()
         if result.successful():
@@ -56,7 +57,22 @@ def auto_collect_data_process():
     except Exception as e:
         LogUtil.log_e('collect data failure ' + e.message)
 
-
+def auto_silent_collect_process():
+    try:
+        # 创建进程池来执行进程
+        # result = None
+        pool = multiprocessing.Pool(processes=2)
+        # result = pool.apply_async(run_monkey, (config.test_package_name(), RUN_MONKEY_COUNT,))
+        result = None
+        for i in range(len(SILENT_ARRAY)):
+            result = pool.apply_async(get_silent_data, (METHOD_ARRAY[i],))
+        pool.close()
+        pool.join()
+        if result.successful():
+            LogUtil.log_i('excute silent success')
+        LogUtil.log_i('All silent process worked!!')
+    except Exception as e:
+        LogUtil.log_e('collect data failure ' + e.message)
 """
     判断是否符合采集数据的条件
 """
@@ -94,6 +110,15 @@ def get_data(method_type):
     elif method_type == METHOD_ARRAY[5]:
         run_monkey(RUN_MONKEY_COUNT)
 
+"""
+    执行静默状态数据采集
+"""
+def get_silent_data(method_type):
+    if method_type == SILENT_ARRAY[0]:
+        get_cpu_data()
+    elif method_type == SILENT_ARRAY[1]:
+        get_flow_silent()
+
 
 """
     用于获取cpu数据
@@ -101,8 +126,12 @@ def get_data(method_type):
 
 
 def get_cpu_data(pic_name='cpu'):
-    i = 0
-    while i < config.collect_data_count:
+    exec_count = 0
+    while True:
+        # if exec_count > config.collect_data_count:
+        #     break
+        if config.run_finish or config.run_silent_state == config.SlientState.FINISH:
+            break
         LogUtil.log_i('Inspect cpu')
         current_page, cpu_data = AndroidUtil.get_cpu_data(package_name)  # 当前采集到的数据
         if cpu_data >= 50.00:
@@ -112,8 +141,47 @@ def get_cpu_data(pic_name='cpu'):
             pass
         cpu_datas.append([current_page, cpu_data])
         time.sleep(config.collect_data_interval)  # 设定多久采集一次数据
-        i += 1
+        exec_count += 1
     LogUtil.log_i('Inspect cpu finish')
+
+"""
+    静默状态获取流量
+"""
+def get_flow_silent(pic_name='silentflow'):
+    # 处理有问题的流量数据，暂定有问题的流量是大于1M时
+    def handle_error_data(current_flow):
+        if current_flow > 5 * 1024:
+            # 异常处理
+            AdbUtil.screenshot(pic_name)
+
+    # 死循环，满足条件后跳出
+    exec_count = 0
+    last_flow_data = 0
+    while True:
+        LogUtil.log_i('get flow data' + str(exec_count))
+        # 判断执行了多少次
+        # if exec_count > config.collect_data_count:
+        #     break
+
+        if config.run_silent_state == config.SlientState.FINISH:
+            break
+
+        # 采集数据 返回三个值，接收的流量、发送的流量、流量总数据，单位是KB
+        flow_recv, flow_send, flow_total = AndroidUtil.get_flow_data(package_name)
+        now_page_name = AndroidUtil.get_cur_activity()
+
+        if exec_count > 0:
+            current_flow_data = flow_total - last_flow_data
+
+            flow_datas_silent.append([now_page_name, current_flow_data])
+            handle_error_data(current_flow_data)
+
+        exec_count += 1
+        # 用于计算每次采集流量增量
+        last_flow_data = flow_total
+
+        # 时间间隔
+        time.sleep(config.collect_data_interval)
 
 
 """
@@ -137,7 +205,10 @@ def get_flow_data(pic_name='flow'):
     while True:
         LogUtil.log_i('get flow data' + str(exec_count))
         # 判断执行了多少次
-        if exec_count > config.collect_data_count:
+        # if exec_count > config.collect_data_count:
+        #     break
+
+        if config.run_finish:
             break
 
         # 采集数据 返回三个值，接收的流量、发送的流量、流量总数据，单位是KB
@@ -183,9 +254,10 @@ def get_fps_data(pic_name='fps'):
     while True:
         LogUtil.log_i('get fps data')
         # 判断执行了多少次
-        if exec_count > config.collect_data_count:
+        # if exec_count > config.collect_data_count:
+        #     break
+        if config.run_finish:
             break
-
         # 采集数据
         frame_count, jank_count, fps = AndroidUtil.get_fps_data_by_gfxinfo(package_name)
         if frame_count is None and jank_count is None and fps is None:
@@ -247,11 +319,16 @@ def get_kpi_data(pic_name='kpi'):
     get_count = 0
     while True:
         LogUtil.log_i('get kpi data')
-        if get_count > config.collect_data_count:
+        if config.run_finish:
             if results.poll() is None:
                 print 'results.terminate()'
                 results.stdout.close()
             break
+        # if get_count > config.collect_data_count:
+        #     if results.poll() is None:
+        #         print 'results.terminate()'
+        #         results.stdout.close()
+        #     break
         # 2.读取内容，并分析
         data = results.stdout.readline()
         print data
@@ -290,11 +367,16 @@ def get_kpi_data(pic_name='kpi'):
 
 
 def get_memory_data(pic_name='memory'):
-    i = 0
+    exec_count = 0
     last_page_name = ''
     last_memory_data = 0
     memory_increase = 0
-    while i < config.collect_data_count:
+    while True:
+        # if exec_count > config.collect_data_count:
+        #     break
+        if config.run_finish:
+            break
+
         LogUtil.log_i('Inspect memory')
         memory_data = int(AndroidUtil.get_memory_data(package_name))  # 当前采集到的数据
         now_page_name = AndroidUtil.get_cur_activity()
@@ -308,7 +390,7 @@ def get_memory_data(pic_name='memory'):
             last_page_name = now_page_name
         else:
             last_memory_data = memory_data
-            i += 1
+            exec_count += 1
             continue
         # 内存增量大于某个值就认为是有问题
         if memory_increase >= 10 * 1024:
@@ -318,8 +400,18 @@ def get_memory_data(pic_name='memory'):
 
         # 设定多久采集一次数据
         time.sleep(config.collect_data_interval)
-        i += 1
+        exec_count += 1
 
+def clear_data():
+    cpu_datas = []
+    flow_datas = []
+    fps_datas = []
+    kpi_datas = []
+    memory_datas = []
+
+def clear_silent_data():
+    cpu_datas = []
+    flow_datas_silent = []
 
 """
     用于跑monkey

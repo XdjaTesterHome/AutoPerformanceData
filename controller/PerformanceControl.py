@@ -29,6 +29,7 @@ class PerformanceControl(object):
     battery_datas = []
 
     METHOD_ARRAY = ['cpu', 'memory', 'kpi', 'fps', 'flow', 'monkey']
+    SILENT_ARRAY = ['cpu', 'flow']
 
     def __init__(self):
         pass
@@ -52,6 +53,27 @@ class PerformanceControl(object):
             time.sleep(config.collect_data_interval)  # 设定多久采集一次数据
             i += 1
         LogUtil.log_i('Inspect cpu finish')
+
+    """
+        用于获取cpu数据
+    """
+
+    @staticmethod
+    def get_cpu_data_silent(package_name, pic_name='cpu'):
+        i = 0
+        while i < config.collect_data_count:
+            LogUtil.log_i('Inspect cpu')
+            current_page, cpu_data = AndroidUtil.get_cpu_data(package_name)  # 当前采集到的数据
+            if cpu_data >= 50.00:
+
+                AdbUtil.screenshot(pic_name)
+            else:
+                pass
+            PerformanceControl.cpu_datas.append([current_page, cpu_data])
+            time.sleep(config.collect_data_interval)  # 设定多久采集一次数据
+            i += 1
+        LogUtil.log_i('Inspect cpu finish')
+
 
     """
         用于获取流量数据
