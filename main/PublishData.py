@@ -7,10 +7,10 @@ sys.path.append(BaseDir)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AutoPerformanceData.settings")
 django.setup()
 
-from CollectData import CollectData
 from performance.models import *
 import common.GlobalConfig as config
 from util.AndroidUtil import AndroidUtil
+from PreProcessData import PreProcessData
 __author__ = 'zhouliwei'
 
 """
@@ -34,11 +34,11 @@ class PublishData(object):
 
     @staticmethod
     def publish_data():
-        PublishData.__publish_fps_data(CollectData.fps_data_dict, config.test_package_name, PublishData.version_code)
-        PublishData.__publish_cpu_data(CollectData.cpu_data_dict, config.test_package_name, PublishData.version_code)
-        PublishData.__publish_kpi_data(CollectData.kpi_data_dict, config.test_package_name, PublishData.version_code)
-        PublishData.__publish_memory_data(CollectData.memory_data_dict, config.test_package_name, PublishData.version_code)
-        PublishData.__publish_flow_data(CollectData.flow_data_dict, config.test_package_name, PublishData.version_code)
+        PublishData.__publish_fps_data(PreProcessData.fps_data_dict, config.test_package_name, PublishData.version_code)
+        PublishData.__publish_cpu_data(PreProcessData.cpu_data_dict, config.test_package_name, PublishData.version_code)
+        PublishData.__publish_kpi_data(PreProcessData.kpi_data_dict, config.test_package_name, PublishData.version_code)
+        PublishData.__publish_memory_data(PreProcessData.memory_data_dict, config.test_package_name, PublishData.version_code)
+        PublishData.__publish_flow_data(PreProcessData.flow_data_dict, config.test_package_name, PublishData.version_code)
 
     """
         将fps数据写入到数据库

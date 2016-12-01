@@ -28,7 +28,7 @@ class PerformanceControl(object):
     memory_datas = []
     battery_datas = []
 
-    METHOD_ARRAY = ['cpu', 'memory', 'kpi', 'fps', 'flow']
+    METHOD_ARRAY = ['cpu', 'memory', 'kpi', 'fps', 'flow', 'monkey']
 
     def __init__(self):
         pass
@@ -257,8 +257,6 @@ class PerformanceControl(object):
     """
         用于跑monkey
     """
-
-    @staticmethod
     def run_monkey(time, package_name):
         LogUtil.log_i('begin exec monkey')
         Monkey.run_monkey(time, package_name)
@@ -272,14 +270,17 @@ class PerformanceControl(object):
         pass
 
     @staticmethod
-    def get_data(methodType, package_name):
-        if methodType == PerformanceControl.METHOD_ARRAY[0]:
+    def get_data(method_type, package_name):
+        print 'exceute get_data' + method_type
+        if method_type == PerformanceControl.METHOD_ARRAY[0]:
             PerformanceControl.get_cpu_data(package_name)
-        elif methodType == PerformanceControl.METHOD_ARRAY[1]:
+        elif method_type == PerformanceControl.METHOD_ARRAY[1]:
             PerformanceControl.get_memory_data(package_name)
-        elif methodType == PerformanceControl.METHOD_ARRAY[2]:
+        elif method_type == PerformanceControl.METHOD_ARRAY[2]:
             PerformanceControl.get_kpi_data(package_name)
-        elif methodType == PerformanceControl.METHOD_ARRAY[3]:
+        elif method_type == PerformanceControl.METHOD_ARRAY[3]:
             PerformanceControl.get_fps_data(package_name)
-        elif methodType == PerformanceControl.METHOD_ARRAY[4]:
+        elif method_type == PerformanceControl.METHOD_ARRAY[4]:
             PerformanceControl.get_flow_data(package_name)
+        elif method_type == PerformanceControl.METHOD_ARRAY[5]:
+            PerformanceControl.run_monkey(package_name)

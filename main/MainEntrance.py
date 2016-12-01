@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from CollectData import CollectData
 from PublishData import PublishData
-import common.GlobalConfig as config
+from PreProcessData import PreProcessData
 from util.LogUtil import LogUtil
+
+import CollectData as Collecter
 
 __author__ = 'zhouliwei'
 
@@ -23,17 +24,17 @@ run_monkey_count = 100
 
 def main_entrance():
     # 1. 判断是否满足采集数据的条件
-    can_collect, tip_message = CollectData.can_collect_data(config.test_package_name)
+    can_collect, tip_message = Collecter.can_collect_data()
     if not can_collect:
         print tip_message
         return
 
     # 2. 开始采集数据的逻辑
-    CollectData().auto_collect_data()
+    Collecter.auto_collect_data_process()
 
     LogUtil.log_i('pre_process_data......')
     # 3. 处理采集到的数据
-    CollectData().pre_process_data()
+    PreProcessData().pre_process_data()
 
     LogUtil.log_i('publish_data......')
     # 4. 对处理之后的数据，写到db中

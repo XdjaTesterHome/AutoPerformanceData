@@ -24,4 +24,4 @@ collect_data_interval = collect_data_count / collect_data_time
 retry_count = 100
 
 # 要测试的App的包名
-test_package_name = 'com.xdja.safekeyservice'
+test_package_name = 'com.xdja.HDSafeEMailClient'
