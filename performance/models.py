@@ -54,6 +54,17 @@ class FpsData(models.Model):
             result_fps_list.append([fps_data.currentPage, fps_data.fps, fps_data.jankCount])
         return result_fps_list
 
+    """
+        根据packageName来获取数据
+    """
+
+    def get_data_by_package_name(self, package_name):
+        fps_data_list = FpsData.objects.filter(packageName=package_name)
+        result_fps_list = [[u'当前页面', u'平均fps值', u'平均丢帧数目']]
+        for fps_data in fps_data_list:
+            result_fps_list.append([fps_data.currentPage, fps_data.fps, fps_data.jankCount])
+        return result_fps_list
+
 
 """
     用于存放cpu数据
@@ -95,6 +106,17 @@ class CpuData(models.Model):
 
     def get_all_data(self):
         cpu_data_list = CpuData.objects.all()
+        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
+        for cpu_data in cpu_data_list:
+            result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
+        return result_cpu_list
+
+    """
+        根据packageName来获取数据
+    """
+
+    def get_data_by_package_name(self, package_name):
+        cpu_data_list = CpuData.objects.filter(packageName=package_name)
         result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
         for cpu_data in cpu_data_list:
             result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
@@ -142,6 +164,17 @@ class KpiData(models.Model):
 
     def get_all_data(self):
         kpi_data_list = KpiData.objects.all()
+        result_kpi_list = [[u'当前页面', u'加载时间']]
+        for kpi_data in kpi_data_list:
+            result_kpi_list.append([kpi_data.currentPage, kpi_data.kpi])
+        return result_kpi_list
+
+    """
+        根据packageName来获取数据
+    """
+
+    def get_data_by_package_name(self, package_name):
+        kpi_data_list = KpiData.objects.filter(packageName=package_name)
         result_kpi_list = [[u'当前页面', u'加载时间']]
         for kpi_data in kpi_data_list:
             result_kpi_list.append([kpi_data.currentPage, kpi_data.kpi])
@@ -197,6 +230,17 @@ class MemoryData(models.Model):
             result_memory_list.append([memory_data.currentPage, memory_data.lastPage, memory_data.memory_increase])
         return result_memory_list
 
+    """
+        根据packageName来获取数据
+    """
+
+    def get_data_by_package_name(self, package_name):
+        memory_data_list = MemoryData.objects.filter(packageName=package_name)
+        result_memory_list = [[u'当前页面', u'上一页面', u'内存增量']]
+        for memory_data in memory_data_list:
+            result_memory_list.append([memory_data.currentPage, memory_data.lastPage, memory_data.memory_increase])
+        return result_memory_list
+
 
 """
     用于存放flow数据
@@ -247,10 +291,11 @@ class FlowData(models.Model):
         for key in flow_keys:
             value = flow_data_dict.get(key)
             flow_list_to_insert.append(
-                FlowData(currentPage=key,  flowIncrease=value, packageName=package_name,
+                FlowData(currentPage=key, flowIncrease=value, packageName=package_name,
                          versionCode=version_code))
 
         FlowData.objects.bulk_create(flow_list_to_insert)
+
     """
         获取所有的数据
         界面暂时只展示页面和flow数据
@@ -261,4 +306,130 @@ class FlowData(models.Model):
         result_flow_list = [[u'当前页面', u'上一页面', u'流量增量']]
         for flow_data in flow_data_list:
             result_flow_list.append([flow_data.currentPage, flow_data.lastPage, flow_data.flowIncrease])
+        return result_flow_list
+
+    """
+        根据packageName来获取数据
+    """
+
+    def get_data_by_package_name(self, package_name):
+        flow_data_list = FlowData.objects.filter(packageName=package_name)
+        result_flow_list = [[u'当前页面', u'上一页面', u'流量增量']]
+        for flow_data in flow_data_list:
+            result_flow_list.append([flow_data.currentPage, flow_data.lastPage, flow_data.flowIncrease])
+        return result_flow_list
+
+
+"""
+    用于存放静默状态cpu数据
+"""
+
+
+class CpuSilentData(models.Model):
+    # 当前页面
+    currentPage = models.TextField()
+
+    # 平均cpu
+    cpu = models.BigIntegerField()
+
+    # 测试应用的包名
+    packageName = models.TextField()
+    # 版本号
+    versionCode = models.TextField()
+
+    """
+          批量的保存数据
+    """
+
+    def save_db_silent_data(self, cpu_data_dict, package_name, version_code):
+        cpu_list_to_insert = []
+        cpu_keys = cpu_data_dict.keys()
+        if len(cpu_keys) <= 0:
+            return
+        for key in cpu_keys:
+            value = cpu_data_dict.get(key)
+            cpu_list_to_insert.append(
+                CpuSilentData(currentPage=key, cpu=value, packageName=package_name,
+                              versionCode=version_code))
+
+        CpuSilentData.objects.bulk_create(cpu_list_to_insert)
+
+    """
+        获取所有的数据
+    """
+
+    def get_all_silent_data(self):
+        cpu_data_list = CpuSilentData.objects.all()
+        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
+        for cpu_data in cpu_data_list:
+            result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
+        return result_cpu_list
+
+    """
+        根据packageName来获取数据
+    """
+
+    def get_data_by_package_name(self, package_name):
+        cpu_data_list = CpuSilentData.objects.filter(packageName=package_name)
+        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
+        for cpu_data in cpu_data_list:
+            result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
+        return result_cpu_list
+
+
+"""
+    用于存放静默状态flow数据
+"""
+
+
+class FlowSilentData(models.Model):
+    # 当前页面
+    currentPage = models.TextField()
+
+    # 平均cpu
+    flow = models.BigIntegerField()
+
+    # 测试应用的包名
+    packageName = models.TextField()
+    # 版本号
+    versionCode = models.TextField()
+
+    """
+          批量的保存数据
+    """
+
+    def save_db_silent_data(self, flow_data_dict, package_name, version_code):
+        flow_list_to_insert = []
+        flow_keys = flow_data_dict.keys()
+        if len(flow_keys) <= 0:
+            return
+        for key in flow_keys:
+            value = flow_data_dict.get(key)
+            flow_list_to_insert.append(
+                FlowSilentData(currentPage=key, flow=value, packageName=package_name,
+                               versionCode=version_code))
+
+        FlowSilentData.objects.bulk_create(flow_list_to_insert)
+
+    """
+         获取所有的数据
+         界面暂时只展示页面和flow数据
+     """
+
+    def get_all_slient_data(self):
+        flow_data_list = FlowSilentData.objects.all()
+        result_flow_list = [[u'当前页面', u'流量值']]
+        for flow_data in flow_data_list:
+            result_flow_list.append([flow_data.currentPage, flow_data.flow])
+        return result_flow_list
+
+    """
+        根据packageName来获取数据
+    """
+
+    def get_data_by_package_name(self, package_name):
+        flow_data_list = FlowSilentData.objects.filter(packageName=package_name)
+        result_flow_list = [[u'当前页面', u'流量值']]
+        for flow_data in flow_data_list:
+            result_flow_list.append([flow_data.currentPage, flow_data.flow])
         return result_flow_list

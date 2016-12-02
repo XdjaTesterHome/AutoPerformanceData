@@ -42,58 +42,19 @@ def get_kpi(request):
     kpi_list = KpiData().get_all_data()
     return render(request, 'get_kpi.html', {'Kpi_list': json.dumps(kpi_list)})
 
+def get_silent_cpu(request):
+    cpu_list = CpuSilentData().get_all_data()
+    return render(request, 'get_kpi.html', {'cpu_list': json.dumps(cpu_list)})
+
+def get_silent_flow(request):
+    flow_list = FlowSilentData().get_all_data()
+    return render(request, 'get_kpi.html', {'flow_list': json.dumps(flow_list)})
 
 def get_power(request):
     return render(request, 'get_power.html')
 
-#get_test方法用于前端网页调试#
+# get_test方法用于前端网页调试#
 def get_test(request):
     if request.method == "POSt":
        import tests
     return render(request, 'test.html')
-
-
-"""
-    开始进行测试
-"""
-
-
-def start_run_test(request):
-    # 开始进行测试
-    Main.start_test_task()
-    return render(request, 'get_fps.html')
-    # return HttpResponse('True'), render(request, 'get_fps.html')
-
-
-"""
-    停止进行测试
-"""
-
-
-def stop_run_test(request):
-    # 开始进行测试
-    Main.set_test_finish()
-    return render(request, 'get_fps.html')
-    # return HttpResponse('True'), render(request, 'get_fps.html')
-
-"""
-    开始进行测试
-"""
-
-
-def start_silent_test(request):
-    # 开始进行测试
-    Main.start_silent_test()
-
-    return HttpResponse('True')
-
-"""
-    开始进行测试
-"""
-
-
-def stop_silent_test(request):
-    # 开始进行测试
-    Main.set_silent_test_finish()
-
-    return HttpResponse('True')

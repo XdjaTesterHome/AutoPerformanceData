@@ -79,13 +79,14 @@ def start_silent_test():
 
     LogUtil.log_i('pre_silent_process_data......')
     # 3. 处理采集到的数据
-    PreProcessData().pre_process_data()
+    PreProcessData().pre_silent_process_data()
 
     LogUtil.log_i('publish_silent_data......')
     # 4. 对处理之后的数据，写到db中
-    PublishData.publish_data()
+    PublishData.publish_silent_data()
 
     LogUtil.log_i('silent performance data collect success')
 
 if __name__ == '__main__':
+
     start_test_task()

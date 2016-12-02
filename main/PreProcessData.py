@@ -16,6 +16,7 @@ class PreProcessData(object):
 
     # 用于存放计算之后的cpu值
     cpu_data_dict = {}
+    cpu_silent_data_dict = {}
 
     # 用于存放计算之后的kpi值
     kpi_data_dict = {}
@@ -199,6 +200,34 @@ class PreProcessData(object):
             PreProcessData.flow_silent_data_dict[now_page_name] = now_flow
 
     """
+        用于对收集的cpu数据进行处理
+        cpu采集到的数据格式是：[current_page, cpu值]
+        处理数据的逻辑：通过current_page来求每个页面的cpu平均值
+
+    """
+
+    @staticmethod
+    def __pre_silent_cpu_data(cpu_datas):
+        if len(cpu_datas) < 1:
+            return
+        for data in cpu_datas:
+            if len(data) < 1:
+                continue
+            now_page_name = data[0]
+            # 这里加个逻辑，假如fps和jank_count是0，就不进行计算
+            if PreProcessData.cpu_silent_data_dict.has_key(now_page_name):
+
+                last_cpu_data = PreProcessData.cpu_silent_data_dict.get(now_page_name)
+                now_cpu_data = (int(data[1]) + int(last_cpu_data)) / 2
+            else:
+
+                # 不包含当前页面，就直接添加
+                now_cpu_data = int(data[1])
+
+            PreProcessData.cpu_silent_data_dict[now_page_name] = now_cpu_data
+
+
+    """
           用于对收集的数据进行预处理
           预处理的规则：对同一类数据，筛选出同一页面的数据，做平均值。
     """
@@ -216,5 +245,5 @@ class PreProcessData(object):
     """
     def pre_silent_process_data(self):
         # 处理收集到的数据
-        PreProcessData.__pre_cpu_data(collect.cpu_datas)
-        PreProcessData.__pre_flow_data(collect.flow_datas)
+        PreProcessData.__pre_silent_cpu_data(collect.cpu_datas)
+        PreProcessData.__pre_silent_flow_data(collect.flow_datas)

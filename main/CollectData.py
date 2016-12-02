@@ -128,10 +128,10 @@ def get_silent_data(method_type):
 def get_cpu_data(pic_name='cpu'):
     exec_count = 0
     while True:
-        # if exec_count > config.collect_data_count:
-        #     break
-        if config.run_finish or config.run_silent_state == config.SlientState.FINISH:
+        if exec_count > config.collect_data_count:
             break
+        # if config.run_finish or config.run_silent_state == config.SlientState.FINISH:
+        #     break
         LogUtil.log_i('Inspect cpu')
         current_page, cpu_data = AndroidUtil.get_cpu_data(package_name)  # 当前采集到的数据
         if cpu_data >= 50.00:
@@ -160,11 +160,11 @@ def get_flow_silent(pic_name='silentflow'):
     while True:
         LogUtil.log_i('get flow data' + str(exec_count))
         # 判断执行了多少次
-        # if exec_count > config.collect_data_count:
-        #     break
-
-        if config.run_silent_state == config.SlientState.FINISH:
+        if exec_count > config.collect_data_count:
             break
+
+        # if config.run_silent_state == config.SlientState.FINISH:
+        #     break
 
         # 采集数据 返回三个值，接收的流量、发送的流量、流量总数据，单位是KB
         flow_recv, flow_send, flow_total = AndroidUtil.get_flow_data(package_name)
@@ -205,11 +205,11 @@ def get_flow_data(pic_name='flow'):
     while True:
         LogUtil.log_i('get flow data' + str(exec_count))
         # 判断执行了多少次
-        # if exec_count > config.collect_data_count:
-        #     break
-
-        if config.run_finish:
+        if exec_count > config.collect_data_count:
             break
+
+        # if config.run_finish:
+        #     break
 
         # 采集数据 返回三个值，接收的流量、发送的流量、流量总数据，单位是KB
         flow_recv, flow_send, flow_total = AndroidUtil.get_flow_data(package_name)
@@ -254,10 +254,10 @@ def get_fps_data(pic_name='fps'):
     while True:
         LogUtil.log_i('get fps data')
         # 判断执行了多少次
-        # if exec_count > config.collect_data_count:
-        #     break
-        if config.run_finish:
+        if exec_count > config.collect_data_count:
             break
+        # if config.run_finish:
+        #     break
         # 采集数据
         frame_count, jank_count, fps = AndroidUtil.get_fps_data_by_gfxinfo(package_name)
         if frame_count is None and jank_count is None and fps is None:
@@ -319,16 +319,16 @@ def get_kpi_data(pic_name='kpi'):
     get_count = 0
     while True:
         LogUtil.log_i('get kpi data')
-        if config.run_finish:
-            if results.poll() is None:
-                print 'results.terminate()'
-                results.stdout.close()
-            break
-        # if get_count > config.collect_data_count:
+        # if config.run_finish:
         #     if results.poll() is None:
         #         print 'results.terminate()'
         #         results.stdout.close()
         #     break
+        if get_count > config.collect_data_count:
+            if results.poll() is None:
+                print 'results.terminate()'
+                results.stdout.close()
+            break
         # 2.读取内容，并分析
         data = results.stdout.readline()
         print data
@@ -372,10 +372,10 @@ def get_memory_data(pic_name='memory'):
     last_memory_data = 0
     memory_increase = 0
     while True:
-        # if exec_count > config.collect_data_count:
-        #     break
-        if config.run_finish:
+        if exec_count > config.collect_data_count:
             break
+        # if config.run_finish:
+        #     break
 
         LogUtil.log_i('Inspect memory')
         memory_data = int(AndroidUtil.get_memory_data(package_name))  # 当前采集到的数据
