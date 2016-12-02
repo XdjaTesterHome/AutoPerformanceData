@@ -18,5 +18,6 @@ urlpatterns = [
     url(r'^getKpi/', views.get_kpi, name='kpi_info'),
     url(r'^getPower/', views.get_power, name='battery_info'),
     url(r'^test/', views.get_test, name='test'),#用于前端展示调试界面
-    url(r'^getSilentCpu/', views.)
+    url(r'^getSilentCpu/', views.get_silent_cpu, name='silent_cpu'),
+    url(r'^getSilentFlow/', views.get_silent_flow, name='silent_flow'),
 ]
