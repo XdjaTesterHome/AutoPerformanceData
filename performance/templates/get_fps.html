@@ -3,7 +3,6 @@
 <script>
  function add(){
     var fps_list ={{ fps_list|safe }}
-    //var fps_list =[["当前页面","平均fps值","平均丢帧","你好"],["com.xdja.scservice.presenter.activity.SettingMainPresenter","51","1","23"],["com.xdja.scservice.presenter.activity.MainPresenter","52","7","23"],["com.xdja.scservice","62","2","23"]]
     var tbl = document.getElementById("tad");
     for (var i=0;i< fps_list.length;i++){
         var obj = tbl.insertRow(tbl.rows.length);

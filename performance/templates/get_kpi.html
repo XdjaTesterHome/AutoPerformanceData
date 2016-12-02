@@ -3,7 +3,6 @@
 <script>
  function add(){
     var Kpi_list = {{ Kpi_list|safe }}
-    var Kpi_list =[["当前页面","加载时间(ms)"],["activity","500"],["activity","690"],["activity","355"]]
     var tbl = document.getElementById("tad");
     for (var i=0;i< Kpi_list.length;i++){
         var obj = tbl.insertRow(tbl.rows.length);

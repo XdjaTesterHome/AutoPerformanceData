@@ -4,7 +4,7 @@
 from django.shortcuts import render
 from models import *
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 # Create your views here.
 import main.MainEntrance as Main
 
@@ -42,19 +42,28 @@ def get_kpi(request):
     kpi_list = KpiData().get_all_data()
     return render(request, 'get_kpi.html', {'Kpi_list': json.dumps(kpi_list)})
 
+
 def get_silent_cpu(request):
     cpu_list = CpuSilentData().get_all_data()
     return render(request, 'get_kpi.html', {'cpu_list': json.dumps(cpu_list)})
+
 
 def get_silent_flow(request):
     flow_list = FlowSilentData().get_all_data()
     return render(request, 'get_kpi.html', {'flow_list': json.dumps(flow_list)})
 
+
 def get_power(request):
     return render(request, 'get_power.html')
+
+
+def get_test_package_name(request):
+    data = {'package_name': ['com.xdja.HDSafeEMailClient', 'com.xdja.safekeyservice']}
+    return JsonResponse(data)
+
 
 # get_test方法用于前端网页调试#
 def get_test(request):
     if request.method == "POSt":
-       import tests
+        import tests
     return render(request, 'test.html')

@@ -1,0 +1,15 @@
+#xdja-navbar {
+    margin-top: 10px;
+    background: #D9EBF5;
+}
+
+#xdja-navbar ul {
+    padding: 4px 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+#xdja-navbar ul li {
+    display: inline;
+    padding: 0;
+}

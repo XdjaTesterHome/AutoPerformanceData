@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^test/', views.get_test, name='test'),#用于前端展示调试界面
     url(r'^getSilentCpu/', views.get_silent_cpu, name='silent_cpu'),
     url(r'^getSilentFlow/', views.get_silent_flow, name='silent_flow'),
+    url(r'^getPackageName/', views.get_test_package_name, name='get_package_name'),
 ]

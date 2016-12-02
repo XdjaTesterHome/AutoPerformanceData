@@ -2,8 +2,7 @@
 {% block bodycontent %}
 <script>
  function add(){
-    //var Memory_list = {{ Memory_list|safe }}
-    var Memory_list =[["当前页面","上一页面","内存增量(KB)"],["activity","activity","20355"],["activity","activity","20565"],["activity","activity","20885"]]
+    var Memory_list ={{ Memory_list|safe }}
     var tbl = document.getElementById("tad");
     for (var i=0;i< Memory_list.length;i++){
         var obj = tbl.insertRow(tbl.rows.length);
