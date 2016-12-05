@@ -186,21 +186,25 @@ $(document).ready(function () {
 
         }
     });
-    //流量信息获取
-    $("#flow_query").click(function () {
-        var filename = $("#selquery").val();
-        var myChart = echarts.init(document.getElementById('main'), 'dark');
-        $.get('/datashow/flowinfo/' + filename).done(function (data) {
-            myChart.hideLoading();
+
+    //流量信息获取  --CPU静态数据静默测试echart生成。
+    $("#Cpu_query").click(function () {
+        var cpu_data = [112, 23, 45, 56, 233, 343, 454, 89, 343, 123, 45, 123]//定义展示的测试数据
+        var titletext = 'CPU静默监控信息';
+        var val = $("#selquery").val();
+        console.log(val)
+        if (val == "com.xdja.safekeyservice") {
+            var myChart = echarts.init(document.getElementById('main'), 'dark');  //创建echarts图表
+            myChart.hideLoading();  //设置为隐藏载入
             myChart.setOption({
                 title: {
-                    text: '流量监控信息'
+                    text: titletext
                 },
                 tooltip: {
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['下行流量', '上行流量']
+                    data: ['CPU占用率']
                 },
                 toolbox: {
                     feature: {
@@ -227,28 +231,17 @@ $(document).ready(function () {
                 ],
                 series: [
                     {
-                        name: '上行流量',
+                        name: 'CPU占用量',
                         type: 'line',
                         stack: '总量',
-                        areaStyle: {normal: {}},
-                        data: data['up']
-                    },
-                    {
-                        name: '下行流量',
-                        type: 'line',
-                        label: {
-                            normal: {
-                                show: true,
-                                position: 'top'
-                            }
-                        },
                         areaStyle: {normal: {opacity: '0.05'}},
-                        data: data['down']
+                        data: cpu_data
                     }
                 ]
             })
-        })
+        }
     });
+
     //获取当前包名和Activity
     $("#get_cur_packagename").click(function () {
         $.getJSON(

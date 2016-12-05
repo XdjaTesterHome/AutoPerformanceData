@@ -7,6 +7,8 @@ import json
 from django.http import HttpResponse, JsonResponse
 # Create your views here.
 import main.MainEntrance as Main
+import tests as te
+
 
 
 def home(request):
@@ -56,6 +58,13 @@ def get_silent_flow(request):
 def get_power(request):
     return render(request, 'get_power.html')
 
+def get_silence_cpu(request):
+    return render(request, 'cpu_silence_info.html')
+
+def get_silence_flow(request):
+    return render(request, 'flow_silence_info.html')
+
+#get_test方法用于前端网页调试#
 
 def get_test_package_name(request):
     data = {'package_name': ['com.xdja.HDSafeEMailClient', 'com.xdja.safekeyservice']}
@@ -64,6 +73,58 @@ def get_test_package_name(request):
 
 # get_test方法用于前端网页调试#
 def get_test(request):
+    # if request.method == "POSt":
+    #     p = te.test()
+    #     return HttpResponse(int(p))
+    # else:
+        return render(request, 'test.html')
+
+
+
+"""
+    开始进行测试
+"""
+
+
+def start_run_test(request):
+    # 开始进行测试
+    Main.start_test_task()
+    return render(request, 'get_fps.html')
+    # return HttpResponse('True'), render(request, 'get_fps.html')
+
+
+"""
+    停止进行测试
+"""
+
+
+def stop_run_test(request):
+    # 开始进行测试
+    Main.set_test_finish()
+    return render(request, 'get_fps.html')
+    # return HttpResponse('True'), render(request, 'get_fps.html')
+
+"""
+    开始进行测试
+"""
+
+
+def start_silent_test(request):
+    # 开始进行测试
+    Main.start_silent_test()
+
+    return HttpResponse('True')
+
+"""
+    开始进行测试
+"""
+
+
+def stop_silent_test(request):
+    # 开始进行测试
+    Main.set_silent_test_finish()
+
+    return HttpResponse('True')
     if request.method == "POSt":
         import tests
     return render(request, 'test.html')

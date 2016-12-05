@@ -1,4 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.test import TestCase
 
 # Create your tests here.
-print "这是一个测试代码"
+def test():
+    a = 5
+    return a

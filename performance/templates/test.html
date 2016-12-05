@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
+<html>
 <body>
-<div>relay1 :
-    <form action ='{% url 'get_test' %}'  method="post" >
-        <input type="submit" value="Toggle" id="toggle1">
-    </form>
-</div>
-test
-&emsp;&emsp;&emsp;
-<input id = "stoprun" type="button" value="停止监控">&emsp;&emsp;&emsp;
-<input id = "jingmo" type="button" value="静默监控">
+<p>请输入两个数字</p>
+<form action="/q/" method="get">
+    a: <input type="text" name="a"> <br>
+    b: <input type="text" name="b"> <br>
+
+    <input type="submit" value="提交">
+</form>
+
 </body>
 </html>
