@@ -193,12 +193,14 @@ $(document).ready(function () {
         var upflow = [1.12, 2.3, 4.5, 5.6, 2.33, 3.43, 4.54, 8.9, 3.43,4.5]
         var downflow = [9.99,10.23,8.99,22.34,67.23,22,33,33,23,34.33,55.21]
         var myChart = echarts.init(document.getElementById('main'), 'dark');
-        var sdata = [112, 23, 45, 56, 233, 343, 454, 89, 343, 123, 45, 123]
+        var pversion  = "3.3.13.2314";
         if (packval == "com.xdja.safekeyservice") {
             myChart.hideLoading();      //隐藏载入
             myChart.setOption({         //设定echarts选项
                 title: {
-                    text: '流量监控信息'
+                    text: '流量监控信息 应用版本号：' + pversion,
+                    x: 'center',
+                    y: 20
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -261,11 +263,12 @@ $(document).ready(function () {
         var val = $("#selquery").val();
         console.log(val)
         if (val == "com.xdja.safekeyservice") {
+            var pversion  = "3.3.13.2314";
             var myChart = echarts.init(document.getElementById('main'), 'dark');  //创建echarts图表
             myChart.hideLoading();  //设置为隐藏载入
             myChart.setOption({
                 title: {
-                    text: titletext
+                    text: titletext+" 应用版本号："+pversion
                 },
                 tooltip: {
                     trigger: 'axis'
