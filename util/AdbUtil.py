@@ -82,6 +82,20 @@ class AdbUtil(object):
             return os.popen(cmd).read()
         except Exception:
             return None
+
+    """
+    获取当前应用版本号信息
+    """
+    @staticmethod
+    def get_verson(package):
+        try:
+            pattern = re.compile(r"versionName=(.*\d+)")
+            out = os.popen("adb shell dumpsys package %s" % package).read()
+            version_name = pattern.findall(out)
+            return version_name
+        except:
+            print "当前无应用，或未找到设备"
+
     """
         检查设备是否连接，并返回设备ID，用于后期执行多线程操作，同时操作多台设备。
     """
