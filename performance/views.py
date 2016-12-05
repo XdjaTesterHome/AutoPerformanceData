@@ -21,37 +21,66 @@ def home(request):
 
 
 def get_fps(request):
-    fps_list = FpsData().get_all_data()
+    package_name = request.GET.get('package_name')
+    # print 'package_name' + package_name
+    if package_name != '':
+        fps_list = FpsData().get_data_by_package_name(package_name)
+    else:
+        fps_list = FpsData().get_all_data()
     return render(request, 'get_fps.html', {'fps_list': json.dumps(fps_list)})
 
 
 def get_memory(request):
-    memory_list = MemoryData().get_all_data()
+    package_name = request.GET.get('package_name')
+    if package_name != '':
+        memory_list = MemoryData().get_data_by_package_name(package_name)
+    else:
+        memory_list = MemoryData().get_all_data()
     return render(request, 'get_memory.html', {'Memory_list': json.dumps(memory_list)})
 
 
 def get_cpu(request):
-    cpu_list = CpuData().get_all_data()
+    package_name = request.GET.get('package_name')
+    if package_name != '':
+        cpu_list = CpuData().get_data_by_package_name(package_name)
+    else:
+        cpu_list = CpuData().get_all_data()
     return render(request, 'get_cpu.html', {'CPU_list': json.dumps(cpu_list)})
 
 
 def get_flow(request):
-    flow_list = FlowData().get_all_data()
+    package_name = request.GET.get('package_name')
+    if package_name != '':
+        flow_list = FlowData().get_data_by_package_name(package_name)
+    else:
+        flow_list = FlowData().get_all_data()
     return render(request, 'get_flow.html', {'Flow_list': json.dumps(flow_list)})
 
 
 def get_kpi(request):
-    kpi_list = KpiData().get_all_data()
+    package_name = request.GET.get('package_name')
+    if package_name != '':
+        kpi_list = KpiData().get_data_by_package_name(package_name)
+    else:
+        kpi_list = KpiData().get_all_data()
     return render(request, 'get_kpi.html', {'Kpi_list': json.dumps(kpi_list)})
 
 
 def get_silent_cpu(request):
-    cpu_list = CpuSilentData().get_all_data()
+    package_name = request.GET.get('package_name')
+    if package_name != '':
+        cpu_list = CpuSilentData().get_data_by_package_name(package_name)
+    else:
+        cpu_list = CpuSilentData().get_all_data()
     return render(request, 'get_kpi.html', {'cpu_list': json.dumps(cpu_list)})
 
 
 def get_silent_flow(request):
-    flow_list = FlowSilentData().get_all_data()
+    package_name = request.GET.get('package_name')
+    if package_name != '':
+        flow_list = FlowSilentData().get_data_by_package_name(package_name)
+    else:
+        flow_list = FlowSilentData().get_all_data()
     return render(request, 'get_kpi.html', {'flow_list': json.dumps(flow_list)})
 
 

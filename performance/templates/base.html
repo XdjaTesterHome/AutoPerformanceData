@@ -22,14 +22,15 @@
                     <li><a href="{% url 'cpu_info' %}">cpu数据</a></li>
                     <li><a href="{% url 'flow_info' %}">流量数据</a></li>
                     <li><a href="{% url 'kpi_info' %}">kpi数据</a></li>
-                    <li><a href="{% url 'fps_info' %}">fps数据</a></li>
-                    <li><a href="{% url 'battery_info' %}">电量数据</a></li>
+                    <li><a href="{% url 'fps_info'%}">fps数据</a></li>
+                    <li><a href="{% url 'battery_info'%}">电量数据</a></li>
                 </ul>
                  <ul class="nav navbar-nav navbar-right" >
                         <li class="dropdown" id = "choose_package">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                请选择包名 <b class="caret"></b>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="choosepkg()" id="package_value">
+                                请选择包名  <b class="caret"></b>
                             </a>
+
                             <ul class="dropdown-menu" id="choose_package_content">
 
                             </ul>
