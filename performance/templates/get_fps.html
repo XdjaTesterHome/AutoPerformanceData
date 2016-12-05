@@ -39,8 +39,10 @@ document.getElementById("stoprun").disabled=false;
 document.getElementById("jingmo").disabled=true;
 }
 </script>
+
 <body onLoad="add()">
-<div id = "anniu">
+
+<div id = "button">
 &emsp;&emsp;&emsp;
 <a href="{% url 'start_test' %}"><input id = "startrun" type="button" name="button1" value="开始监控" onclick="runtest()" ></a>
 &emsp;&emsp;&emsp;
@@ -49,8 +51,9 @@ document.getElementById("jingmo").disabled=true;
 <a href="{% url 'start_silent_test' %}"><input id = "jingmo" type="button" name="button3" value="静默监控" onclick="Silencetest()" ></a>
 </div>
 <h1 id=></h1>
-<div style="position:relative;left:50px">
-<table  width="60%" border="1px" id="tad" >
+
+<table  width="70%" border="1px" id="tad" align="center">
 </table>
-</div>
+</br>
+
 {% endblock %}
