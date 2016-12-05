@@ -187,7 +187,74 @@ $(document).ready(function () {
         }
     });
 
-    //流量信息获取  --CPU静态数据静默测试echart生成。
+    //流量信息获取
+    $("#flow_query").click(function () {
+        var packval = $("#selquery").val();
+        var upflow = [1.12, 2.3, 4.5, 5.6, 2.33, 3.43, 4.54, 8.9, 3.43,4.5]
+        var downflow = [9.99,10.23,8.99,22.34,67.23,22,33,33,23,34.33,55.21]
+        var myChart = echarts.init(document.getElementById('main'), 'dark');
+        var sdata = [112, 23, 45, 56, 233, 343, 454, 89, 343, 123, 45, 123]
+        if (packval == "com.xdja.safekeyservice") {
+            myChart.hideLoading();      //隐藏载入
+            myChart.setOption({         //设定echarts选项
+                title: {
+                    text: '流量监控信息'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['下行流量', '上行流量']
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: []
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '上行流量',
+                        type: 'line',
+                        stack: '总量',
+                        areaStyle: {normal: {}},
+                        data: upflow
+                    },
+                    {
+                        name: '下行流量',
+                        type: 'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {opacity: '0.05'}},
+                        data: downflow
+                    }
+                ]
+            })
+        }
+    });
+
+    //--CPU静态数据静默测试echart生成。
     $("#Cpu_query").click(function () {
         var cpu_data = [112, 23, 45, 56, 233, 343, 454, 89, 343, 123, 45, 123]//定义展示的测试数据
         var titletext = 'CPU静默监控信息';
