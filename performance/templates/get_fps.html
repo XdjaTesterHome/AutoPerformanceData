@@ -1,59 +1,34 @@
 {% extends "base.html" %}
 {% block bodycontent %}
-<script>
- function add(){
-    var fps_list ={{ fps_list|safe }}
-    var tbl = document.getElementById("tad");
-    for (var i=0;i< fps_list.length;i++){
-        var obj = tbl.insertRow(tbl.rows.length);
-        for (var k=0;k< fps_list[i].length;k++){
-        obj.insertCell().innerHTML = fps_list[i][k];
+    <script>
+        function add() {
+            var package_name = localStorage.getItem("package_name");
+            $.get('/performance/getFpsData/' + package_name).done(function (data) {
+                alert("ddddd")
+                alert(data);
+                var fps_list = data["fps_list"]
+                var tbl = document.getElementById("tad");
+                for (var i = 0; i < fps_list.length; i++) {
+                    var obj = tbl.insertRow(tbl.rows.length);
+                    for (var k = 0; k < fps_list[i].length; k++) {
+                        obj.insertCell().innerHTML = fps_list[i][k];
+                    }
+                }
+                var rows = tbl.getElementsByTagName("tr");
+                for (var j = 0; j < rows.length; j++) {
+                    if (fps_list[j][1] <= 30 || fps_list[j][2] >= 3) {
+                        rows[j].style.color = "#f00";//调整表格内字体颜色
+
+                    }
+                }
+                rows[0].style.fontWeight = "bold";//加粗表头th字体
+            });
         }
-        }
-    var rows = tbl.getElementsByTagName("tr");
-    for (var j=0;j<rows.length;j++){
-        if (fps_list[j][1] <=30 || fps_list[j][2]>=3){
-             rows[j].style.color = "#f00";//调整表格内字体颜色
+        add()
+    </script>
+    <h1 id=></h1>
 
-        }
-        }
-        rows[0].style.fontWeight="bold";//加粗表头th字体
-}
-
-function runtest(){
-document.getElementById("startrun").disabled=true;
-document.getElementById("stoprun").disabled=false;
-document.getElementById("jingmo").disabled=true;
-
-}
-
-function stoptest(){
-document.getElementById("startrun").disabled=false;
-document.getElementById("stoprun").disabled=true;
-document.getElementById("jingmo").disabled=false;
-}
-
-function Silencetest(){
-document.getElementById("startrun").disabled=true;
-document.getElementById("stoprun").disabled=false;
-document.getElementById("jingmo").disabled=true;
-}
-</script>
-
-<body onLoad="add()">
-
-<div id = "button">
-&emsp;&emsp;&emsp;
-<a href="{% url 'start_test' %}"><input id = "startrun" type="button" name="button1" value="开始监控" onclick="runtest()" ></a>
-&emsp;&emsp;&emsp;
-<a href="{% url 'stop_test' %}"><input id = "stoprun" type="button" name="button2" value="停止监控" onclick="stoptest()" disabled="true" ></a>
-&emsp;&emsp;&emsp;
-<a href="{% url 'start_silent_test' %}"><input id = "jingmo" type="button" name="button3" value="静默监控" onclick="Silencetest()" ></a>
-</div>
-<h1 id=></h1>
-
-<table  width="70%" border="1px" id="tad" align="center">
-</table>
-</br>
+    <table width="70%" border="1px" id="tad" align="center">
+    </table>
 
 {% endblock %}
