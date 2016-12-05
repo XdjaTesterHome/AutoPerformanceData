@@ -11,20 +11,20 @@
     <script src="../static/js/dark.js"></script>
     <script src="../static/js/xdja-common.js"></script>
 </head>
-<body>
+<body onload="loadData()">
 <div style="text-align: center;">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="text-align: center;">
-                <ul class="nav navbar-nav" style="display: inline-block; float:none; font-size:20px;">
+                <ul class="nav navbar-nav" style="display: inline-block; float:none; font-size:15px;">
                     <li><a href="{% url 'memory_info' %}">内存数据</a></li>
                     <li><a href="{% url 'cpu_info' %}">cpu数据</a></li>
                     <li><a href="{% url 'flow_info' %}">流量数据</a></li>
                     <li><a href="{% url 'kpi_info' %}">kpi数据</a></li>
                     <li><a href="{% url 'fps_info' %}">fps数据</a></li>
                     <li><a href="{% url 'battery_info' %}">电量数据</a></li>
-                    <li><a href="{% url 'cpu_silence_info' %}">CPU静默</a></li>
+                    <li><a href="{% url 'cpu_silence_info' %}">cpu静默</a></li>
                     <li><a href="{% url 'flow_silence_info' %}">流量静默</a></li>
                 </ul>
                  <ul class="nav navbar-nav navbar-right" >

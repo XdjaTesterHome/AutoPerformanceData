@@ -1,53 +1,29 @@
 {% extends "base.html" %}
 {% block bodycontent %}
-<script>
- function add(){
-    var CPU_list ={{ CPU_list|safe }}
-    var tbl = document.getElementById("tad");
-    for (var i=0;i< CPU_list.length;i++){
-        var obj = tbl.insertRow(tbl.rows.length);
-        for (var k=0;k< CPU_list[i].length;k++){
-        obj.insertCell().innerHTML = CPU_list[i][k];
+    <script>
+        function add() {
+            var package_name = localStorage.getItem("package_name");
+            $.get('/performance/getCpuData/' + package_name).done(function (data) {
+                var CPU_list = data['cpu_list'];
+                var tbl = document.getElementById("tad");
+                for (var i = 0; i < CPU_list.length; i++) {
+                    var obj = tbl.insertRow(tbl.rows.length);
+                    for (var k = 0; k < CPU_list[i].length; k++) {
+                        obj.insertCell().innerHTML = CPU_list[i][k];
+                    }
+                }
+                var rows = tbl.getElementsByTagName("tr");
+                for (var j = 0; j < rows.length; j++) {
+                    if (CPU_list[j][1] >= 50.00) {
+                        rows[j].style.color = "#f00";
+                    }
+                }
+                rows[0].style.fontWeight = "bold";//加粗表头th字体
+            });
         }
-        }
-    var rows = tbl.getElementsByTagName("tr");
-    for (var j=0;j<rows.length;j++){
-        if (CPU_list[j][1] >=50.00){
-             rows[j].style.color = "#f00";
- }
-}
-rows[0].style.fontWeight="bold";//加粗表头th字体
-}
-function runtest(){
-document.getElementById("startrun").disabled=true;
-document.getElementById("stoprun").disabled=false;
-document.getElementById("jingmo").disabled=true;
-
-}
-
-function stoptest(){
-document.getElementById("startrun").disabled=false;
-document.getElementById("stoprun").disabled=true;
-document.getElementById("jingmo").disabled=false;
-}
-
-function Silencetest(){
-document.getElementById("startrun").disabled=true;
-document.getElementById("stoprun").disabled=false;
-document.getElementById("jingmo").disabled=true;
-}
-</script>
-<body onLoad="add()">
-<div id = "anniu">
-&emsp;&emsp;&emsp;
-<input id = "startrun" type="button" name="button1" value="开始监控" onclick="runtest()" >
-&emsp;&emsp;&emsp;
-<input id = "stoprun" type="button" name="button2" value="停止监控" onclick="stoptest()" disabled="true" >
-&emsp;&emsp;&emsp;
-<input id = "jingmo" type="button" name="button3" value="静默监控" onclick="Silencetest()" >
-</div>
-<h1 id=></h1>
-<table  width="70%" border="1px" id="tad" align="center">
-</table>
-</br>
+        add()
+    </script>
+    <h1 id=></h1>
+    <table width="70%" border="1px" id="tad" align="center">
+    </table>
 {% endblock %}

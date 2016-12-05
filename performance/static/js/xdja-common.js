@@ -34,11 +34,22 @@ function choosepkg() {
                 li.onclick = function () {
                     $("#package_value").text(this.innerHTML).append('<b class="caret"></b>');
                     // 全局包名，通过this()获得
-                    global_package_name = this.innerHTML
+                    var package_name = this.innerHTML;
+                    alert(package_name);
+                    localStorage.setItem("package_name", package_name);
+                    // window.global_package_name = this.innerHTML
                 };
                 $("#choose_package_content").append(li).append('<li class="divider"></li>');
                 // $("#choose_package_content").append('<li> <a href="#">' + val + '</a> </li>').append('<li class="divider"></li>');
             })
         }
     );
+}
+
+function loadData() {
+    var package_name = localStorage.getItem("package_name");
+    alert(package_name);
+    if (package_name != null){
+        $("#package_value").text(package_name).append('<b class="caret"></b>');
+    }
 }
