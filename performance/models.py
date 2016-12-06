@@ -430,5 +430,103 @@ class FlowSilentData(models.Model):
             result_flow_list.append([flow_data.currentPage, flow_data.flow])
         return result_flow_list
 
+
+"""
+    用于存放flow数据
+"""
+
+
+class BatteryData(models.Model):
+    # uid
+    uid = models.TextField()
+
+    # 当前app的包名
+    appPackageName = models.TextField()
+
+    # battery使用情况
+    batteryUse = models.TextField()
+
+    # 测试应用的包名
+    packageName = models.TextField()
+    # 版本号
+    versionCode = models.TextField()
+
+    """
+          批量的保存数据
+    """
+
+    def save_db_data(self, battery_data_dict, package_name, version_code):
+        battery_list_to_insert = []
+        if len(battery_data_dict) <= 0:
+            return
+        for battery_data in battery_data_dict:
+            battery_list_to_insert.append(
+                BatteryData(uid=battery_data[0], appPackageName=battery_data[1], batteryUse=battery_data[2],
+                            packageName=package_name,
+                            versionCode=version_code))
+
+        BatteryData.objects.bulk_create(battery_list_to_insert)
+
+    """
+        获取所有的数据
+        界面暂时只展示页面和flow数据
+    """
+
+    def get_all_data(self):
+        battery_data_list = BatteryData.objects.all()
+        result_battery_list = [[u'Uid', u'应用包名', u'耗电量情况']]
+        for battery_data in battery_data_list:
+            result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.batteryUse])
+        return result_battery_list
+
+    """
+        根据packageName来获取数据
+    """
+
+    def get_data_by_package_name(self, package_name):
+        battery_data_list = BatteryData.objects.filter(packageName=package_name)
+        result_battery_list = [[u'Uid', u'应用包名', u'耗电量情况']]
+        for battery_data in battery_data_list:
+            result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.batteryUse])
+        return result_battery_list
+
+
+"""
+    用于存放测试应用公共数据
+"""
+
+
+class CommonData(models.Model):
+    # 测试的包名
+    packageName = models.TextField()
+
+    # 测试的app版本号
+    packageVersion = models.TextField()
+
+    # 电量数据文件
+    batteryFilePath = models.Field(upload_to='upload/battery/')
+
+    def save_data(self, common_data_list):
+        common_data_insert_list = []
+
+        if len(common_data_list) < 1:
+            return
+        for common_data in common_data_list:
+            if len(common_data) < 1:
+                continue
+            common_data_insert_list.append(CommonData(packageName=common_data[0], packageVersion=common_data[1],
+                                           batteryFilePath=common_data[2]))
+        CommonData.objects.bulk_create(common_data_insert_list)
+
+    def get_all_data(self):
+        common_data_list = CommonData.objects.all()
+        result_common_list = []
+        for common_data in common_data_list:
+            result_common_list.append([common_data.packageName, common_data.packageVersion, common_data.batteryFilePath])
+        return result_common_list
+
+    def __unicode__(self):
+        return self.packageName+ '-' + self.packageVersion
+
 if __name__ == '__main__':
     MemoryData().get_data_by_package_name('com.')

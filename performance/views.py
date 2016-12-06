@@ -2,14 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
+
+# Create your views here.
+import tests as te
 from models import *
 import json
-from django.http import HttpResponse, JsonResponse
-# Create your views here.
-import main.MainEntrance as Main
-import tests as te
-
-
 
 def home(request):
     return render(request, 'home.html')
@@ -108,8 +106,13 @@ def get_silent_flow_data(request, package_name):
 
 def get_power(request):
     return render(request, 'get_power.html')
-def get_power_data(request):
-    return render(request, 'get_power.html')
+def get_power_data(request, package_name):
+    if package_name != '':
+        battery_list = BatteryData().get_data_by_package_name(package_name)
+    else:
+        battery_list = BatteryData().get_all_data()
+    battery_json_list = {'battery_list': battery_list}
+    return JsonResponse(battery_json_list)
 
 def get_silence_cpu(request):
     return render(request, 'cpu_silence_info.html')
@@ -131,53 +134,11 @@ def get_test(request):
     #     return HttpResponse(int(p))
     # else:
         return render(request, 'test.html')
-
-
-
 """
-    开始进行测试
+    用于上传文件
 """
-
-
-def start_run_test(request):
-    # 开始进行测试
-    Main.start_test_task()
-    return render(request, 'get_fps.html')
-    # return HttpResponse('True'), render(request, 'get_fps.html')
-
-
-"""
-    停止进行测试
-"""
-
-
-def stop_run_test(request):
-    # 开始进行测试
-    Main.set_test_finish()
-    return render(request, 'get_fps.html')
-    # return HttpResponse('True'), render(request, 'get_fps.html')
-
-"""
-    开始进行测试
-"""
-
-
-def start_silent_test(request):
-    # 开始进行测试
-    Main.start_silent_test()
-
-    return HttpResponse('True')
-
-"""
-    开始进行测试
-"""
-
-
-def stop_silent_test(request):
-    # 开始进行测试
-    Main.set_silent_test_finish()
-
-    return HttpResponse('True')
-    if request.method == "POSt":
-        import tests
-    return render(request, 'test.html')
+def upload_file(request, file_path):
+    if request.method == 'POST':
+        if not file_path:
+            return HttpResponse("no files for upload")
+        form = (request.POST, request.FILES)
