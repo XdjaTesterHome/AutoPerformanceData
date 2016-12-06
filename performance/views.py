@@ -8,6 +8,8 @@ from django.http import HttpResponse, JsonResponse
 import tests as te
 from models import *
 import json
+import os
+from models import CommonData
 
 def home(request):
     return render(request, 'home.html')
@@ -134,11 +136,29 @@ def get_test(request):
     #     return HttpResponse(int(p))
     # else:
         return render(request, 'test.html')
-"""
-    用于上传文件
-"""
-def upload_file(request, file_path):
+
+def upload_file(request):
+    # if not request.user.is_superuser:
+    #     # 判断是否为管理员，只有管理员才有权限访问upload.html页面
+    #     return HttpResponse(True)
+    # else:
     if request.method == 'POST':
-        if not file_path:
-            return HttpResponse("no files for upload")
-        form = (request.POST, request.FILES)
+        f = request.FILES.get('file')
+        handle_upload_file(f)
+    else:
+        pass
+    return HttpResponse(True)
+
+def handle_upload_file(f):
+    try:
+
+        f_path = '/upload/' + f.name
+        if not os.path.exists(f_path):
+            os.mkdir(f_path)
+        with open(f_path, 'wb+') as info:
+            print f.name
+            for chunk in f.chunks():
+                info.write(chunk)
+        return f
+    except Exception as e:
+        print e

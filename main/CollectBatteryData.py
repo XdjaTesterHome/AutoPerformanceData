@@ -12,7 +12,7 @@ from util.AdbUtil import AdbUtil
 from util.LogUtil import LogUtil
 import common.GlobalConfig as config
 from performance.models import BatteryData
-
+import util.UploadFileUtil as loadFile
 __author__ = 'zhouliwei'
 
 """
@@ -85,4 +85,7 @@ if __name__ == '__main__':
     get_battery_data()
     LogUtil.log_i('begin save battery data.....')
     publish_battery_data()
-    LogUtil.log_i('finish collect battery data.....')
+    LogUtil.log_i('upload battery data.....')
+    #
+    # loadFile.upload_file(data_folder+'\\batterystats.txt', package_name, AdbUtil.get_verson(package_name))
+    # LogUtil.log_i('finish collect battery data.....')

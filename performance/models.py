@@ -504,7 +504,7 @@ class CommonData(models.Model):
     packageVersion = models.TextField()
 
     # 电量数据文件
-    batteryFilePath = models.Field(upload_to='upload/battery/')
+    batteryFilePath = models.FileField(upload_to='upload/')
 
     def save_data(self, common_data_list):
         common_data_insert_list = []

@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import include, url
 from . import views
+from django.conf import settings
+
 __author__ = 'zhouliwei'
 
 """
@@ -9,6 +11,7 @@ function:
 date:2016/11/29
 
 """
+
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^getFps/', views.get_fps, name='fps_info'),
@@ -29,4 +32,5 @@ urlpatterns = [
     url(r'^getSilentCpu/', views.get_silent_cpu, name='silent_cpu'),
     url(r'^getSilentFlow/', views.get_silent_flow, name='silent_flow'),
     url(r'^getPackageName/', views.get_test_package_name, name='get_package_name'),
+    url(r'^upload/', views.upload_file, name='upload_file')
 ]
