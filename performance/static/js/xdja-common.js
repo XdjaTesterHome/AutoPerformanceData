@@ -38,6 +38,7 @@ function choosepkg() {
                     alert(package_name);
                     localStorage.setItem("package_name", package_name);
                     // window.global_package_name = this.innerHTML
+                    window.location.reload();
                 };
                 $("#choose_package_content").append(li).append('<li class="divider"></li>');
                 // $("#choose_package_content").append('<li> <a href="#">' + val + '</a> </li>').append('<li class="divider"></li>');
