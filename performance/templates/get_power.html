@@ -2,7 +2,8 @@
 {% block bodycontent %}
     <script>
         function add() {
-            $.get('/performance/getPowerData/').done(function (data) {
+            var package_name = localStorage.getItem("package_name");
+            $.get('/performance/getPowerData/' + package_name).done(function (data) {
                 var Power_list = data["battery_list"];
                 var tbl = document.getElementById("tad");
                 for (var i = 0; i < Power_list.length; i++) {

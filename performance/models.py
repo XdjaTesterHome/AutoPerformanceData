@@ -164,7 +164,7 @@ class KpiData(models.Model):
 
     def get_all_data(self):
         kpi_data_list = KpiData.objects.all()
-        result_kpi_list = [[u'当前页面', u'加载时间']]
+        result_kpi_list = [[u'当前页面', u'加载时间(ms)']]
         for kpi_data in kpi_data_list:
             result_kpi_list.append([kpi_data.currentPage, kpi_data.kpi])
         return result_kpi_list
@@ -175,7 +175,7 @@ class KpiData(models.Model):
 
     def get_data_by_package_name(self, package_name):
         kpi_data_list = KpiData.objects.filter(packageName=package_name)
-        result_kpi_list = [[u'当前页面', u'加载时间']]
+        result_kpi_list = [[u'当前页面', u'加载时间(ms)']]
         for kpi_data in kpi_data_list:
             result_kpi_list.append([kpi_data.currentPage, kpi_data.kpi])
         return result_kpi_list

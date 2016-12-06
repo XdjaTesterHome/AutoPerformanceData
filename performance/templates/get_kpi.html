@@ -14,7 +14,8 @@
                 }
                 var rows = tbl.getElementsByTagName("tr");
                 for (var j = 0; j < rows.length; j++) {
-                    if (Kpi_list[j][1] >= 500) {
+                    //kpi暂时将超过2s加载时间的定义为有问题的
+                    if (Kpi_list[j][1] >= 2000) {
                         rows[j].style.color = "#f00";
                     }
                 }
