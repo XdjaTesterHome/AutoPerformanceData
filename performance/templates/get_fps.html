@@ -4,8 +4,6 @@
         function add() {
             var package_name = localStorage.getItem("package_name");
             $.get('/performance/getFpsData/' + package_name).done(function (data) {
-                alert("ddddd")
-                alert(data);
                 var fps_list = data["fps_list"]
                 var tbl = document.getElementById("tad");
                 for (var i = 0; i < fps_list.length; i++) {

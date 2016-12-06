@@ -48,7 +48,6 @@ function choosepkg() {
 
 function loadData() {
     var package_name = localStorage.getItem("package_name");
-    alert(package_name);
     if (package_name != null){
         $("#package_value").text(package_name).append('<b class="caret"></b>');
     }

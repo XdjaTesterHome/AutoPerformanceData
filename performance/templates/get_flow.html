@@ -5,7 +5,6 @@
             var package_name = localStorage.getItem("package_name");
             $.get('/performance/getFlowData/' + package_name).done(function (data) {
                 var Flow_list = data["flow_list"]
-                {{ Flow_list|safe }}
                 var tbl = document.getElementById("tad");
                 for (var i = 0; i < Flow_list.length; i++) {
                     var obj = tbl.insertRow(tbl.rows.length);

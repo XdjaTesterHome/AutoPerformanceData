@@ -343,13 +343,11 @@ class CpuSilentData(models.Model):
 
     def save_db_silent_data(self, cpu_data_dict, package_name, version_code):
         cpu_list_to_insert = []
-        cpu_keys = cpu_data_dict.keys()
-        if len(cpu_keys) <= 0:
+        if len(cpu_data_dict) <= 0:
             return
-        for key in cpu_keys:
-            value = cpu_data_dict.get(key)
+        for value in cpu_data_dict:
             cpu_list_to_insert.append(
-                CpuSilentData(currentPage=key, cpu=value, packageName=package_name,
+                CpuSilentData(currentPage=value[0], cpu=value[1], packageName=package_name,
                               versionCode=version_code))
 
         CpuSilentData.objects.bulk_create(cpu_list_to_insert)
@@ -400,13 +398,11 @@ class FlowSilentData(models.Model):
 
     def save_db_silent_data(self, flow_data_dict, package_name, version_code):
         flow_list_to_insert = []
-        flow_keys = flow_data_dict.keys()
-        if len(flow_keys) <= 0:
+        if len(flow_data_dict) <= 0:
             return
-        for key in flow_keys:
-            value = flow_data_dict.get(key)
+        for value in flow_data_dict:
             flow_list_to_insert.append(
-                FlowSilentData(currentPage=key, flow=value, packageName=package_name,
+                FlowSilentData(currentPage=value[0], flow=value[1], packageName=package_name,
                                versionCode=version_code))
 
         FlowSilentData.objects.bulk_create(flow_list_to_insert)
@@ -433,3 +429,6 @@ class FlowSilentData(models.Model):
         for flow_data in flow_data_list:
             result_flow_list.append([flow_data.currentPage, flow_data.flow])
         return result_flow_list
+
+if __name__ == '__main__':
+    MemoryData().get_data_by_package_name('com.')

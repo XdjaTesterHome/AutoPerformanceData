@@ -1,6 +1,7 @@
 #!/usr/bin/env python      
 # -*- coding: utf-8 -*-
 import CollectData as collect
+from GlobalPerformanceData import GlobalPerformanceData as GlobalData
 __author__ = 'zhouliwei'
 
 """
@@ -233,17 +234,22 @@ class PreProcessData(object):
     """
     def pre_process_data(self):
         # 处理收集到的数据
-        PreProcessData.__pre_fps_data(collect.fps_datas)
-        PreProcessData.__pre_cpu_data(collect.cpu_datas)
-        PreProcessData.__pre_flow_data(collect.flow_datas)
-        PreProcessData.__pre_kpi_data(collect.kpi_datas)
-        PreProcessData.__pre_memory_data(collect.memory_datas)
+        PreProcessData.__pre_fps_data(GlobalData.get_fps_datas())
+        PreProcessData.__pre_cpu_data(GlobalData.get_cpu_datas())
+        PreProcessData.__pre_flow_data(GlobalData.get_flow_datas())
+        PreProcessData.__pre_kpi_data(GlobalData.get_kpi_datas())
+        PreProcessData.__pre_memory_data(GlobalData.get_memory_datas())
 
     """
           用于对收集的数据进行预处理
           预处理的规则：对同一类数据，筛选出同一页面的数据，做平均值。
     """
     def pre_silent_process_data(self):
+        print GlobalData.get_silent_cpu_datas()
+        print GlobalData.get_silent_flow_datas()
         # 处理收集到的数据
-        PreProcessData.__pre_silent_cpu_data(collect.cpu_datas)
-        PreProcessData.__pre_silent_flow_data(collect.flow_datas)
+        PreProcessData.__pre_silent_cpu_data(GlobalData.get_silent_cpu_datas())
+        PreProcessData.__pre_silent_flow_data(GlobalData.get_silent_flow_datas())
+if __name__ == '__main__':
+    GlobalData.fps_datas.append([0,0])
+    print GlobalData.fps_datas

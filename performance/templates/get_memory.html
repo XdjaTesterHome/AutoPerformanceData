@@ -5,7 +5,6 @@
             var package_name = localStorage.getItem("package_name");
             $.get('/performance/getMemData/' + package_name).done(function (data) {
                 var Memory_list = data["memory_list"]
-                {{ Memory_list|safe }}
                 var tbl = document.getElementById("tad");
                 for (var i = 0; i < Memory_list.length; i++) {
                     var obj = tbl.insertRow(tbl.rows.length);

@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from PublishData import PublishData
-from PreProcessData import PreProcessData
 from util.LogUtil import LogUtil
 from util.AndroidUtil import AndroidUtil
 
-import CollectData as Collecter
+import CollectAndSaveData as Collecter
 import common.GlobalConfig as config
+
 __author__ = 'zhouliwei'
 
 
@@ -15,8 +14,6 @@ function: 脚本的主入口
 date:2016/11/25
 
 """
-
-run_monkey_count = 100
 
 """
     程序的主入口
@@ -35,14 +32,6 @@ def start_test_task():
 
     # 2. 开始采集数据的逻辑
     Collecter.auto_collect_data_process()
-
-    LogUtil.log_i('pre_process_data......')
-    # 3. 处理采集到的数据
-    PreProcessData().pre_process_data()
-
-    LogUtil.log_i('publish_data......')
-    # 4. 对处理之后的数据，写到db中
-    PublishData.publish_data()
 
     LogUtil.log_i('performance data collect success')
 
@@ -70,23 +59,14 @@ def start_silent_test():
 
     # 2.将标志位设置为start
     config.run_silent_state = config.SlientState.START
-    Collecter.clear_data()
+    Collecter.clear_silent_data()
 
     # 3. 应用置于后台，灭屏
     AndroidUtil.make_app_silent()
 
     Collecter.auto_silent_collect_process()
 
-    LogUtil.log_i('pre_silent_process_data......')
-    # 3. 处理采集到的数据
-    PreProcessData().pre_silent_process_data()
-
-    LogUtil.log_i('publish_silent_data......')
-    # 4. 对处理之后的数据，写到db中
-    PublishData.publish_silent_data()
-
     LogUtil.log_i('silent performance data collect success')
 
 if __name__ == '__main__':
-
     start_test_task()
