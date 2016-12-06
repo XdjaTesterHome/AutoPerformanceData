@@ -69,4 +69,4 @@ def start_silent_test():
     LogUtil.log_i('silent performance data collect success')
 
 if __name__ == '__main__':
-    start_test_task()
+    start_silent_test()

@@ -285,12 +285,12 @@ def get_flow_data(pic_name='flow'):
             current_flow_data = flow_total - last_flow_data
             if now_page_name != last_page_name:
                 flow_increase = current_flow_data - last_flow
-                last_page_name = now_page_name
                 flow_datas.append([now_page_name, last_page_name, flow_increase])
                 handle_error_data(flow_increase)
 
         # 用于记录每次的流量增量
         last_flow = current_flow_data
+        last_page_name = now_page_name
         exec_count += 1
         # 用于计算每次采集流量增量
         last_flow_data = flow_total

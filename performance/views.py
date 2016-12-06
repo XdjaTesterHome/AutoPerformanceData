@@ -108,11 +108,8 @@ def get_silent_flow_data(request, package_name):
 
 def get_power(request):
     return render(request, 'get_power.html')
-def get_power_data(request, package_name):
-    if package_name != '':
-        battery_list = BatteryData().get_data_by_package_name(package_name)
-    else:
-        battery_list = BatteryData().get_all_data()
+def get_power_data(request):
+    battery_list = BatteryData().get_all_data()
     battery_json_list = {'battery_list': battery_list}
     return JsonResponse(battery_json_list)
 
