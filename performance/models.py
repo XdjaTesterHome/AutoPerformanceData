@@ -451,6 +451,9 @@ class BatteryData(models.Model):
     # 版本号
     versionCode = models.TextField()
 
+    class Meta:
+        unique_together = ("packageName", "versionCode")  # 这是重点
+
     """
           批量的保存数据
     """
