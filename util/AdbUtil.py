@@ -232,6 +232,48 @@ class AdbUtil(object):
             LogUtil.log_e(e.message)
 
 
+    """
+        用于获取指定APP的电量数据
+    """
+    @staticmethod
+    def get_battery_data(pkg_name):
+        try:
+            if pkg_name is None or pkg_name == '':
+                cmd = 'dumpsys batterystats'
+            else:
+                cmd = 'dumpsys batterystats %s' % pkg_name
+            # data = subprocess.check_output(cmd, shell=True)
+            data = AdbUtil.exec_adb_shell(cmd)
+            if data is not None and data is not '' :
+                return data
+            else:
+                return 0
+        except IOError as e:
+            LogUtil.log_e('getbatterydata ' + e.message)
+
+    """
+        通过uid来查找packageName
+    """
+    @staticmethod
+    def get_package_name_by_uid(uid):
+        try:
+            cmd = 'adb shell ps | findStr %s' % uid
+            results = os.popen(cmd, "r")
+            package_name = ''
+            while 1:
+                line = results.readline()
+                if not line: break
+                lines = line.split(' ')
+                if lines[0] == uid:
+                    package_name += lines[len(lines) - 1].strip()
+                    package_name += '、'
+            package_name_length = len(package_name)
+            package_name = package_name[:package_name_length - 3]
+            results.close()
+            return package_name
+
+        except IOError as e:
+            LogUtil.log_e('get packageName by uid' + e.message)
 
 if __name__ == '__main__':
     print AdbUtil().get_pid("com.xdja.safekeyservice")

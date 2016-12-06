@@ -2,9 +2,9 @@
 {% block bodycontent %}
     <script>
         function add() {
-             var package_name = localStorage.getItem("package_name");
-            $.get('/datashow/getPowerData/' + package_name).done(function (data) {
-                var Power_list = data["power_list"];
+            var package_name = localStorage.getItem("package_name");
+            $.get('/performance/getPowerData/' + package_name).done(function (data) {
+                var Power_list = data["battery_list"];
                 var tbl = document.getElementById("tad");
                 for (var i = 0; i < Power_list.length; i++) {
                     var obj = tbl.insertRow(tbl.rows.length);
@@ -13,19 +13,21 @@
                     }
                 }
                 var rows = tbl.getElementsByTagName("tr");
-                for (var j = 0; j < rows.length; j++) {
-                    if (Power_list[j][1] >= 50.00) {
-                        rows[j].style.color = "#f00";
-                    }
-                }
                 rows[0].style.fontWeight = "bold";//加粗表头th字体
             });
         }
         add()
     </script>
     <h1 id=></h1>
+    <div class="panel-body">
+        <p>耗电量测试需要拔掉usb之后，执行自己的测试用例，一段时间后再连接usb收集电量数据</p>
+
+        <p>分析收集的数据可以使用开源库battery historian转换图表分析，这里展示的是各个应用的耗电情况</p>
+
+        <p><strong>拔掉usb测试之前，要执行 adb shell dumpsys batterystats --reset来清空之前的测试数据</strong></p>
+    </div>
     <div style="position:relative;left:50px">
-        <table width="60%" border="1px" id="tad">
+        <table width="60%" border="1px" id="tad" align="center">
         </table>
     </div>
 {% endblock %}

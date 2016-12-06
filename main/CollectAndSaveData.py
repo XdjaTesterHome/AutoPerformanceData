@@ -474,7 +474,6 @@ def get_memory_data(pic_name='memory'):
         time.sleep(config.collect_data_interval)
         exec_count += 1
 
-
 def clear_data():
     cpu_datas = []
     memory_datas = []
@@ -749,4 +748,5 @@ def __publish_silent_cpu_data():
 
 if __name__ == '__main__':
     # print cpu_count()
-    get_silent_cpu_data()
+    data_folder = os.path.abspath(os.path.join(os.path.dirname('__file__'), os.path.pardir)) + '\\TestResultData'
+    print data_folder
