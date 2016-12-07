@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+from __future__ import print_function
 from util.LogUtil import LogUtil
 from util.AndroidUtil import AndroidUtil
 
@@ -26,7 +28,7 @@ def start_test_task():
     # 1. 判断是否满足采集数据的条件
     can_collect, tip_message = Collecter.can_collect_data()
     if not can_collect:
-        print tip_message
+        print(tip_message)
         return
     Collecter.clear_data()
 
@@ -54,7 +56,7 @@ def start_silent_test():
     # 1. 判断是否满足采集数据的条件
     can_collect, tip_message = Collecter.can_collect_data()
     if not can_collect:
-        print tip_message
+        print(tip_message)
         return
 
     # 2.将标志位设置为start

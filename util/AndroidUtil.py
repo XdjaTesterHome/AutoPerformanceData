@@ -224,9 +224,9 @@ class AndroidUtil(object):
                     list_rx.append(int(rx_bytes))
                     list_tx.append(int(tx_bytes))
                 float_total_net_traffic = (sum(list_rx) + sum(list_tx)) / 1024.0
-                float_total_net_traffic = round(float_total_net_traffic, 4)
+                float_total_net_traffic = round(float_total_net_traffic, 2)
                 return sum(list_rx), sum(list_tx), float_total_net_traffic
-            except Exception, e:
+            except Exception as e:
                 log.log_e('cannot get flow from /proc/net/xt_qtaguid/stats' + e.message)
         else:
             try:
@@ -255,6 +255,8 @@ class AndroidUtil(object):
                 return 'unknow'
             activity_name = result.split('/')[1].strip()
             activity_name = activity_name.split(' ')[0].strip()
+            if activity_name.startswith('.'):
+                activity_name = activity_name[1:]
             return activity_name
         except Exception,e:
             log.log_e('get current activity failure' + e.message)
@@ -327,6 +329,4 @@ class AndroidUtil(object):
         AdbUtil.press_power_key()
 
 if __name__ == '__main__':
-    print  AndroidUtil().get_cpu_data("com.xdja.safekeyservice")
-
-    print AndroidUtil.process_alive('com.xdja.actoma')
+    print  AndroidUtil().get_memory_data('com.xdja.HDSafeEMailClient')

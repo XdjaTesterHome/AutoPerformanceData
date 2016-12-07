@@ -8,7 +8,7 @@ $(document).ready(function(){
 var package_name = localStorage.getItem("package_name");
 $.get('/performance/getsilenceflowdata/' + package_name).done(function (data) {
     var flow_list = data["flow_list"]
-    alert(flow_list);
+    // alert(flow_list);
     var flow_data = [];
     for (var i=0;i<flow_list.length-1;i=i+1)
      {
@@ -16,7 +16,7 @@ $.get('/performance/getsilenceflowdata/' + package_name).done(function (data) {
          flow_data.push(flow_list[i+1][1]);
 
     }
-alert(flow_data);
+// alert(flow_data);
     if (package_name == "") {
         document.getElementById("p2").innerHTML = "当前未选择包名，请选定包名"
     }
