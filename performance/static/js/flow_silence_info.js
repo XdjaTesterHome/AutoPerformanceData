@@ -56,7 +56,9 @@ alert(flow_data);
             ],
             yAxis: [
                 {
-                    type: 'value'
+                    type: 'value',
+                    min: -10,
+                    max: 110
                 }
             ],
             series: [
