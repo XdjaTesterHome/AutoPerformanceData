@@ -14,7 +14,8 @@
                 }
                 var rows = tbl.getElementsByTagName("tr");
                 for (var j = 0; j < rows.length; j++) {
-                    if (CPU_list[j][1] >= 50.00) {
+                    // 当cpu占有率大于30%时，认为是有问题的。
+                    if (CPU_list[j][1] >= 30.00) {
                         rows[j].style.color = "#f00";
                     }
                 }

@@ -1,5 +1,6 @@
 #!/usr/bin/env python      
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import multiprocessing
 import re
 import subprocess
@@ -128,7 +129,7 @@ def can_collect_data():
 
 
 def get_data(method_type):
-    print 'exceute get_data' + method_type
+    print ('exceute get_data' + method_type)
     if method_type == METHOD_ARRAY[0]:
         get_cpu_data()
     elif method_type == METHOD_ARRAY[1]:
@@ -169,7 +170,7 @@ def get_cpu_data(pic_name='cpu'):
             break
         # if config.run_finish or config.run_silent_state == config.SlientState.FINISH:
         #     break
-        LogUtil.log_i('Inspect cpu')
+        LogUtil.log_i('Inspect cpu' + str(exec_count))
         current_page, cpu_data = AndroidUtil.get_cpu_data(package_name)  # 当前采集到的数据
         if cpu_data >= 50.00:
 
@@ -264,8 +265,7 @@ def get_flow_data(pic_name='flow'):
     exec_count = 0
     last_flow_data = 0
     last_page_name = ''
-    last_flow = 0
-    current_flow_data = 0
+    first_flow_data = 0
     while True:
         LogUtil.log_i('get flow data' + str(exec_count))
         # 判断执行了多少次
@@ -280,21 +280,32 @@ def get_flow_data(pic_name='flow'):
         # 采集数据 返回三个值，接收的流量、发送的流量、流量总数据，单位是KB
         flow_recv, flow_send, flow_total = AndroidUtil.get_flow_data(package_name)
         now_page_name = AndroidUtil.get_cur_activity()
-
-        if exec_count > 0:
-            current_flow_data = flow_total - last_flow_data
-            if now_page_name != last_page_name:
-                flow_increase = current_flow_data - last_flow
-                last_page_name = now_page_name
-                flow_datas.append([now_page_name, last_page_name, flow_increase])
+        # print("flow_total" + str(flow_total))
+        # print ("last_flow_data" + str(last_flow_data))
+        # print ("first_flow_data" + str(first_flow_data))
+        # 这里计算每个页面的流量消耗情况
+        if exec_count <= 0:
+            # 避免第一次少计算一次值造成误差
+            first_flow_data = flow_total
+        elif exec_count < config.collect_data_count:
+            if now_page_name == last_page_name:
+                # last_flow_data = flow_total
+                exec_count += 1
+                continue
+            else:
+                flow_increase = flow_total - first_flow_data
                 handle_error_data(flow_increase)
+                flow_datas.append([last_page_name, round(flow_increase, 2)])
+                first_flow_data = flow_total
+        elif exec_count == config.collect_data_count:
+            if last_page_name == now_page_name:
+                flow_increase = flow_total - first_flow_data
+                handle_error_data(flow_increase)
+                flow_datas.append([now_page_name, round(flow_increase, 2)])
 
         # 用于记录每次的流量增量
-        last_flow = current_flow_data
+        last_page_name = now_page_name
         exec_count += 1
-        # 用于计算每次采集流量增量
-        last_flow_data = flow_total
-
         # 时间间隔
         time.sleep(config.collect_data_interval)
 
@@ -392,16 +403,18 @@ def get_kpi_data(pic_name='kpi'):
         #         print 'results.terminate()'
         #         results.stdout.close()
         #     break
-        if get_count > config.collect_data_count:
+        # 这里只所以多加了30，是为了能够收集所有的数据，因为现在是一行行的读取数据
+        if get_count > config.collect_data_count + 30:
             if results.poll() is None:
-                print 'results.terminate()'
+                print ('results.terminate()')
                 results.stdout.close()
             __pre_kpi_data()
             __publish_kpi_data()
             break
         # 2.读取内容，并分析
         data = results.stdout.readline()
-        print data
+
+        print (data)
         # 处理读取到的String
         if data is not None:
             if 'Displayed' in data:
@@ -423,11 +436,12 @@ def get_kpi_data(pic_name='kpi'):
                 now_page_name = now_page[2].split('/')[1]
             else:
                 now_page_name = 'unknow'
-
+        print('now_page_name = ' + str(now_page_name) + '===jumpa_page' + jump_page + '===cost_time' + cost_time)
         # 将结果保存到数组中
         if now_page_name is not None and now_page_name != '' and jump_page is not None and cost_time is not None:
             kpi_datas.append([now_page_name, jump_page, handle_cost_time(cost_time)])
             handle_error_data(cost_time)
+        # time.sleep(config.collect_data_interval)
         get_count += 1
 
 
@@ -453,6 +467,12 @@ def get_memory_data(pic_name='memory'):
         memory_data = int(AndroidUtil.get_memory_data(package_name))  # 当前采集到的数据
         now_page_name = AndroidUtil.get_cur_activity()
         # 目前暂时粗略的计算增量，当页面不一样时，计算增量
+        if exec_count == 0:
+            last_page_name = now_page_name
+            last_memory_data = memory_data
+            exec_count += 1
+            continue
+        # 主要的逻辑
         if now_page_name != last_page_name:
             memory_increase = memory_data - last_memory_data
             if memory_increase < 0:
@@ -473,6 +493,7 @@ def get_memory_data(pic_name='memory'):
         # 设定多久采集一次数据
         time.sleep(config.collect_data_interval)
         exec_count += 1
+
 
 def clear_data():
     cpu_datas = []
@@ -550,13 +571,13 @@ def __pre_cpu_data():
         if cpu_data_dict.has_key(now_page_name):
 
             last_cpu_data = cpu_data_dict.get(now_page_name)
-            now_cpu_data = (int(data[1]) + int(last_cpu_data)) / 2
+            now_cpu_data = (int(data[1]) + int(last_cpu_data)) / 2.0
         else:
 
             # 不包含当前页面，就直接添加
-            now_cpu_data = int(data[1])
+            now_cpu_data = float(data[1])
 
-        cpu_data_dict[now_page_name] = now_cpu_data
+        cpu_data_dict[now_page_name] = round(now_cpu_data, 2)
 
 
 """
@@ -628,29 +649,22 @@ def __pre_flow_data():
     for flow_data in flow_datas:
         if len(flow_data) < 1:
             continue
-
         now_page_name = flow_data[0]
         if flow_data_dict.has_key(now_page_name):
             flow_value = flow_data_dict.get(now_page_name)
             # 同样的逻辑，参考内存的计算方式
-            if flow_value[1] == flow_data[1]:
-                last_flow = flow_value[0]
-                now_flow = (int(last_flow) + flow_data[2]) / 2
-                last_page_name = flow_data[1]
-            else:
-                now_flow = int(flow_data[2])
-                last_page_name = flow_data[1]
+            now_flow = (int(flow_value) + int(flow_data[1]))/2.0
         else:
-            now_flow = int(flow_data[2])
-            last_page_name = flow_data[1]
+            now_flow = float(flow_data[1])
 
-        flow_data_dict[now_page_name] = [now_flow, last_page_name]
+        flow_data_dict[now_page_name] = round(now_flow, 2)
 
 
 """
     用于处理流量值
     数据格式是：[[now_page, last_page, 流量增量]]
 """
+
 
 def __pre_silent_flow_data():
     if len(flow_datas_silent) < 1:
@@ -671,6 +685,8 @@ def __pre_silent_flow_data():
     处理数据的逻辑：通过current_page来求每个页面的cpu平均值
 
 """
+
+
 def __pre_silent_cpu_data():
     if len(cpu_datas_silent) < 1:
         return
@@ -748,5 +764,5 @@ def __publish_silent_cpu_data():
 
 if __name__ == '__main__':
     # print cpu_count()
-    data_folder = os.path.abspath(os.path.join(os.path.dirname('__file__'), os.path.pardir)) + '\\TestResultData'
-    print data_folder
+    print (AndroidUtil.get_cpu_data('com.xdja.HDSafeEMailClient'))
+    print(fps_datas)

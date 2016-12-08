@@ -76,7 +76,7 @@ class CpuData(models.Model):
     currentPage = models.TextField()
 
     # 平均cpu
-    cpu = models.BigIntegerField()
+    cpu = models.FloatField()
 
     # 测试应用的包名
     packageName = models.TextField()
@@ -94,9 +94,13 @@ class CpuData(models.Model):
             return
         for key in cpu_keys:
             value = cpu_data_dict.get(key)
-            cpu_list_to_insert.append(
-                CpuData(currentPage=key, cpu=value, packageName=package_name,
-                        versionCode=version_code))
+            cpu_data = CpuData.objects.filter(currentPage=key)
+            if len(cpu_data) > 0:
+                cpu_data.update(cpu=value)
+            else:
+                cpu_list_to_insert.append(
+                    CpuData(currentPage=key, cpu=value, packageName=package_name,
+                            versionCode=version_code))
 
         CpuData.objects.bulk_create(cpu_list_to_insert)
 
@@ -151,9 +155,13 @@ class KpiData(models.Model):
             return
         for key in kpi_keys:
             value = kpi_data_dict.get(key)
-            kpi_list_to_insert.append(
-                KpiData(currentPage=key, kpi=value, packageName=package_name,
-                        versionCode=version_code))
+            kpi_data = KpiData.objects.filter(currentPage=key)
+            if len(kpi_data) > 1:
+                kpi_data.update(kpi=value)
+            else:
+                kpi_list_to_insert.append(
+                    KpiData(currentPage=key, kpi=value, packageName=package_name,
+                            versionCode=version_code))
 
         KpiData.objects.bulk_create(kpi_list_to_insert)
 
@@ -164,7 +172,7 @@ class KpiData(models.Model):
 
     def get_all_data(self):
         kpi_data_list = KpiData.objects.all()
-        result_kpi_list = [[u'当前页面', u'加载时间']]
+        result_kpi_list = [[u'当前页面', u'加载时间(ms)']]
         for kpi_data in kpi_data_list:
             result_kpi_list.append([kpi_data.currentPage, kpi_data.kpi])
         return result_kpi_list
@@ -175,7 +183,7 @@ class KpiData(models.Model):
 
     def get_data_by_package_name(self, package_name):
         kpi_data_list = KpiData.objects.filter(packageName=package_name)
-        result_kpi_list = [[u'当前页面', u'加载时间']]
+        result_kpi_list = [[u'当前页面', u'加载时间(ms)']]
         for kpi_data in kpi_data_list:
             result_kpi_list.append([kpi_data.currentPage, kpi_data.kpi])
         return result_kpi_list
@@ -194,7 +202,7 @@ class MemoryData(models.Model):
     lastPage = models.TextField()
 
     # 平均cpu
-    memory_increase = models.BigIntegerField()
+    memory_increase = models.FloatField()
 
     # 测试应用的包名
     packageName = models.TextField()
@@ -225,7 +233,7 @@ class MemoryData(models.Model):
 
     def get_all_data(self):
         memory_data_list = MemoryData.objects.all()
-        result_memory_list = [[u'当前页面', u'上一页面', u'内存增量']]
+        result_memory_list = [[u'当前页面', u'上一页面', u'内存增量(KB)']]
         for memory_data in memory_data_list:
             result_memory_list.append([memory_data.currentPage, memory_data.lastPage, memory_data.memory_increase])
         return result_memory_list
@@ -236,7 +244,7 @@ class MemoryData(models.Model):
 
     def get_data_by_package_name(self, package_name):
         memory_data_list = MemoryData.objects.filter(packageName=package_name)
-        result_memory_list = [[u'当前页面', u'上一页面', u'内存增量']]
+        result_memory_list = [[u'当前页面', u'上一页面', u'内存增量(KB)']]
         for memory_data in memory_data_list:
             result_memory_list.append([memory_data.currentPage, memory_data.lastPage, memory_data.memory_increase])
         return result_memory_list
@@ -251,11 +259,8 @@ class FlowData(models.Model):
     # 当前页面
     currentPage = models.TextField()
 
-    # 上一页面
-    lastPage = models.TextField()
-
     # 平均cpu
-    flowIncrease = models.BigIntegerField()
+    flowIncrease = models.FloatField()
 
     # 测试应用的包名
     packageName = models.TextField()
@@ -274,7 +279,7 @@ class FlowData(models.Model):
         for key in flow_keys:
             value = flow_data_dict.get(key)
             flow_list_to_insert.append(
-                FlowData(currentPage=key, lastPage=value[1], flowIncrease=value[0], packageName=package_name,
+                FlowData(currentPage=key, flowIncrease=value, packageName=package_name,
                          versionCode=version_code))
 
         FlowData.objects.bulk_create(flow_list_to_insert)
@@ -303,9 +308,9 @@ class FlowData(models.Model):
 
     def get_all_data(self):
         flow_data_list = FlowData.objects.all()
-        result_flow_list = [[u'当前页面', u'上一页面', u'流量增量']]
+        result_flow_list = [[u'当前页面', u'流量消耗(KB)']]
         for flow_data in flow_data_list:
-            result_flow_list.append([flow_data.currentPage, flow_data.lastPage, flow_data.flowIncrease])
+            result_flow_list.append([flow_data.currentPage, flow_data.flowIncrease])
         return result_flow_list
 
     """
@@ -314,9 +319,9 @@ class FlowData(models.Model):
 
     def get_data_by_package_name(self, package_name):
         flow_data_list = FlowData.objects.filter(packageName=package_name)
-        result_flow_list = [[u'当前页面', u'上一页面', u'流量增量']]
+        result_flow_list = [[u'当前页面', u'流量增量(KB)']]
         for flow_data in flow_data_list:
-            result_flow_list.append([flow_data.currentPage, flow_data.lastPage, flow_data.flowIncrease])
+            result_flow_list.append([flow_data.currentPage, flow_data.flowIncrease])
         return result_flow_list
 
 
@@ -505,6 +510,9 @@ class CommonData(models.Model):
 
     # 电量数据文件
     batteryFilePath = models.FileField(upload_to='upload/')
+
+    class Meta:
+        unique_together = ("packageName", "packageVersion")  # 这是重点
 
     def save_data(self, common_data_list):
         common_data_insert_list = []

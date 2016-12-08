@@ -14,7 +14,8 @@
                 }
                 var rows = tbl.getElementsByTagName("tr");
                 for (var j = 0; j < rows.length; j++) {
-                    if (fps_list[j][1] <= 30 || fps_list[j][2] >= 3) {
+                    //暂定fps的规则是帧率小于35，丢帧数目大于10帧
+                    if (fps_list[j][1] <= 35 || fps_list[j][2] >= 10) {
                         rows[j].style.color = "#f00";//调整表格内字体颜色
 
                     }
@@ -24,6 +25,15 @@
         }
         add()
     </script>
+
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h2 class="panel-title">温馨提示:</h2>
+        </div>
+        <div class="panel-body">
+            <strong>测试页面帧率时，请在手机开发者选项—GPU呈现模式分析 勾选【在 adb shell dumpsys gfxinfo中】</strong><br />
+        </div>
+    </div>
     <h1 id=></h1>
 
     <table width="70%" border="1px" id="tad" align="center">

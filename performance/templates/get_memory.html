@@ -14,7 +14,8 @@
                 }
                 var rows = tbl.getElementsByTagName("tr");
                 for (var j = 0; j < rows.length; j++) {
-                    if (Memory_list[j][2] >= 50.00) {
+                    // 当内存增量大于10M，认为是有问题的
+                    if (Memory_list[j][2] >= 10 * 1024) {
                         rows[j].style.color = "#f00";
                     }
                 }

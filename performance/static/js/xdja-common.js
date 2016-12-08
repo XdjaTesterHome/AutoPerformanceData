@@ -21,7 +21,9 @@ $("#choose_package").click(function (event) {
  * 点击选择包名的按钮
  */
 function choosepkg() {
+    alert('22222');
     $("#choose_package_content").empty();
+    alert('11111');
     $.getJSON(
         '/performance/getPackageName/',
         function (data) {
@@ -35,7 +37,6 @@ function choosepkg() {
                     $("#package_value").text(this.innerHTML).append('<b class="caret"></b>');
                     // 全局包名，通过this()获得
                     var package_name = this.innerHTML;
-                    alert(package_name);
                     localStorage.setItem("package_name", package_name);
                     // window.global_package_name = this.innerHTML
                     window.location.reload();
