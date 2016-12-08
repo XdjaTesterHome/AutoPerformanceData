@@ -30,8 +30,6 @@ class AdbUtil(object):
         results.close()
         return command_result
 
-
-
     @staticmethod
     def exec_adb(commands):
         command_result = ''
@@ -92,7 +90,7 @@ class AdbUtil(object):
             pattern = re.compile(r"versionName=(.*\d+)")
             out = os.popen("adb shell dumpsys package %s" % package).read()
             version_name = pattern.findall(out)
-            return version_name
+            return version_name[0]
         except:
             print "当前无应用，或未找到设备"
 
@@ -276,5 +274,5 @@ class AdbUtil(object):
             LogUtil.log_e('get packageName by uid' + e.message)
 
 if __name__ == '__main__':
-    print AdbUtil().get_pid("com.xdja.safekeyservice")
+    print AdbUtil().get_verson("com.xdja.safekeyservice")
     pass
