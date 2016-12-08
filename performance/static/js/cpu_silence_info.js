@@ -8,7 +8,7 @@ $(document).ready(function(){
 var package_name = localStorage.getItem("package_name");
 $.get('/performance/getsilencecpudata/' + package_name).done(function (data) {
     var cpu_list = data["cpu_list"]
-    alert(cpu_list);
+    // alert(cpu_list);
     var cpu_data = [];
     for (var i=0;i<cpu_list.length-1;i=i+1)
      {
@@ -16,7 +16,7 @@ $.get('/performance/getsilencecpudata/' + package_name).done(function (data) {
          cpu_data.push(cpu_list[i+1][1]);
 
     }
-alert(cpu_data);
+// alert(cpu_data);
     if (package_name == "") {
         document.getElementById("p2").innerHTML = "当前未选择包名，请选定包名"
     }
