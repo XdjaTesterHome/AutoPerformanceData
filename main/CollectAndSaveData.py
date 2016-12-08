@@ -466,15 +466,13 @@ def get_memory_data(pic_name='memory'):
         # if config.run_finish:
         #     break
 
-        LogUtil.log_i('Inspect memory')
+        LogUtil.log_i('Inspect memory' + str(exec_count))
         memory_data = int(AndroidUtil.get_memory_data(package_name))  # 当前采集到的数据
         now_page_name = AndroidUtil.get_cur_activity()
         memory_datas.append([now_page_name, memory_data])
         # 内存增量大于某个值就认为是有问题
         if memory_data >= 10 * 1024:
             AdbUtil.screenshot(pic_name)
-            LogUtil.log_i('Inspect memory 12')
-        LogUtil.log_i('Inspect memory 13')
 
         # 设定多久采集一次数据
         time.sleep(config.collect_data_interval)

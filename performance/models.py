@@ -569,7 +569,6 @@ class BatteryData(models.Model):
     用于存放测试应用公共数据
 """
 
-
 class CommonData(models.Model):
     # 测试的包名
     packageName = models.TextField()
@@ -581,19 +580,24 @@ class CommonData(models.Model):
     batteryFilePath = models.FileField(upload_to='upload/')
 
     class Meta:
-        unique_together = ("packageName", "packageVersion")  # 这是重点
+        db_table = 'performance_commondata'
+        unique_together = ('packageName', 'packageVersion')  # 这是重点
 
     def save_data(self, common_data_list):
-        common_data_insert_list = []
+        try:
+            common_data_insert_list = []
 
-        if len(common_data_list) < 1:
-            return
-        for common_data in common_data_list:
-            if len(common_data) < 1:
-                continue
-            common_data_insert_list.append(CommonData(packageName=common_data[0], packageVersion=common_data[1],
-                                           batteryFilePath=common_data[2]))
-        CommonData.objects.bulk_create(common_data_insert_list)
+            if len(common_data_list) < 1:
+                return
+            for common_data in common_data_list:
+                if len(common_data) < 1:
+                    continue
+                common_data_insert_list.append(CommonData(packageName=common_data[0], packageVersion=common_data[1],
+                                               batteryFilePath=common_data[2]))
+            CommonData.objects.bulk_create(common_data_insert_list)
+        except Exception as e:
+            if 'UNIQUE constraint failed:' in e.message:
+                print e
 
     def get_all_data(self):
         common_data_list = CommonData.objects.all()
