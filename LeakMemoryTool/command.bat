@@ -6,5 +6,4 @@ sed -i "/dependencies/a\testCompile 'com.squareup.leakcanary:leakcanary-android-
 sed -i "/<\/application>/i\<service android:name=\".LeakUploadService\" android:exported=\"false\"\/>" ./app/src/main/AndroidManifest.xml
 echo 执行python脚本
 python command.py
-pause
 echo 执行leakcanary脚本完毕
