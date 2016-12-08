@@ -56,7 +56,9 @@ $.get('/performance/getsilenceflowdata/' + package_name).done(function (data) {
             ],
             yAxis: [
                 {
-                    type: 'value'
+                    type: 'value',
+                    min: -10,
+                    max: 110
                 }
             ],
             series: [
