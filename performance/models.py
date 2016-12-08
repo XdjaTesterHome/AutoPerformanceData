@@ -198,9 +198,6 @@ class MemoryData(models.Model):
     # 当前页面
     currentPage = models.TextField()
 
-    # 上一页面
-    lastPage = models.TextField()
-
     # 平均cpu
     memory_increase = models.FloatField()
 
@@ -221,7 +218,7 @@ class MemoryData(models.Model):
         for key in memory_keys:
             value = memory_data_dict.get(key)
             memory_list_to_insert.append(
-                MemoryData(currentPage=key, lastPage=value[1], memory_increase=value[0], packageName=package_name,
+                MemoryData(currentPage=key, memory_increase=value, packageName=package_name,
                            versionCode=version_code))
 
         MemoryData.objects.bulk_create(memory_list_to_insert)
@@ -233,9 +230,9 @@ class MemoryData(models.Model):
 
     def get_all_data(self):
         memory_data_list = MemoryData.objects.all()
-        result_memory_list = [[u'当前页面', u'上一页面', u'内存增量(KB)']]
+        result_memory_list = [[u'当前页面', u'内存增量(KB)']]
         for memory_data in memory_data_list:
-            result_memory_list.append([memory_data.currentPage, memory_data.lastPage, memory_data.memory_increase])
+            result_memory_list.append([memory_data.currentPage, memory_data.memory_increase])
         return result_memory_list
 
     """
@@ -244,9 +241,9 @@ class MemoryData(models.Model):
 
     def get_data_by_package_name(self, package_name):
         memory_data_list = MemoryData.objects.filter(packageName=package_name)
-        result_memory_list = [[u'当前页面', u'上一页面', u'内存增量(KB)']]
+        result_memory_list = [[u'当前页面', u'内存增量(KB)']]
         for memory_data in memory_data_list:
-            result_memory_list.append([memory_data.currentPage, memory_data.lastPage, memory_data.memory_increase])
+            result_memory_list.append([memory_data.currentPage, memory_data.memory_increase])
         return result_memory_list
 
 

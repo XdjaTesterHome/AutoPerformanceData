@@ -452,9 +452,6 @@ def get_kpi_data(pic_name='kpi'):
 
 def get_memory_data(pic_name='memory'):
     exec_count = 0
-    last_page_name = ''
-    last_memory_data = 0
-    memory_increase = 0
     while True:
         if exec_count > config.collect_data_count:
             __pre_memory_data()
@@ -466,26 +463,9 @@ def get_memory_data(pic_name='memory'):
         LogUtil.log_i('Inspect memory')
         memory_data = int(AndroidUtil.get_memory_data(package_name))  # 当前采集到的数据
         now_page_name = AndroidUtil.get_cur_activity()
-        # 目前暂时粗略的计算增量，当页面不一样时，计算增量
-        if exec_count == 0:
-            last_page_name = now_page_name
-            last_memory_data = memory_data
-            exec_count += 1
-            continue
-        # 主要的逻辑
-        if now_page_name != last_page_name:
-            memory_increase = memory_data - last_memory_data
-            if memory_increase < 0:
-                # 对于发生GC的情况，内存增量可能是负值, 暂时先不做处理
-                pass
-            memory_datas.append([now_page_name, last_page_name, memory_increase])
-            last_page_name = now_page_name
-        else:
-            last_memory_data = memory_data
-            exec_count += 1
-            continue
+        memory_datas.append([now_page_name, memory_data])
         # 内存增量大于某个值就认为是有问题
-        if memory_increase >= 10 * 1024:
+        if memory_data >= 10 * 1024:
             AdbUtil.screenshot(pic_name)
             LogUtil.log_i('Inspect memory 12')
         LogUtil.log_i('Inspect memory 13')
@@ -607,34 +587,18 @@ def __pre_kpi_data():
 
 """
     用于预处理内存的数据
-    数据格式是[[now_page, last_page, 内存增量]]
+    数据格式是[[now_page, 内存增量]]
 """
 
 
 def __pre_memory_data():
     if len(memory_datas) < 1:
         return
-    now_memory_increase = 0
-    last_page_name = ''
     for memory_data in memory_datas:
         if len(memory_data) < 1:
             continue
-        now_page_name = memory_data[0]
-        if memory_data_dict.has_key(now_page_name):
-            memory_value = memory_data_dict.get(now_page_name)
-            if memory_data[1] == memory_value[1]:
-                if memory_data[2] != '':
-                    last_memory_increase = memory_value[0]
-                    now_memory_increase = (int(last_memory_increase) + memory_data[2]) / 2.0
-                    last_page_name = memory_value[1]
-            else:
-                now_memory_increase = memory_data[2]
-                last_page_name = memory_data[1]
-        else:
-            if memory_data[2] != '':
-                now_memory_increase = int(memory_data[2])
-            last_page_name = memory_data[1]
-        memory_data_dict[now_page_name] = [now_memory_increase, last_page_name]
+
+        memory_data_dict[memory_data[0]] = round(memory_data[1], 2)
 
 
 """
@@ -764,5 +728,5 @@ def __publish_silent_cpu_data():
 
 if __name__ == '__main__':
     # print cpu_count()
-    print (AndroidUtil.get_cpu_data('com.xdja.HDSafeEMailClient'))
-    print(fps_datas)
+    get_memory_data()
+    print(memory_datas)
