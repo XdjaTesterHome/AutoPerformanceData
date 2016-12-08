@@ -3,7 +3,8 @@
     <script>
         function add() {
             var package_name = localStorage.getItem("package_name");
-            $.get('/performance/getFpsData/' + package_name).done(function (data) {
+            var version_name = localStorage.getItem("version");
+            $.get('/performance/getFpsData/' + package_name+'/'+version_name).done(function (data) {
                 var fps_list = data["fps_list"]
                 var tbl = document.getElementById("tad");
                 for (var i = 0; i < fps_list.length; i++) {

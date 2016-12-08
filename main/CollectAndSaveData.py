@@ -64,7 +64,7 @@ kpi_datas = []
 memory_datas = []
 flow_datas_silent = []
 cpu_datas_silent = []
-
+common_data_list = []
 """
        用于验证多进程自动收集数据
 """
@@ -72,6 +72,10 @@ cpu_datas_silent = []
 
 def auto_collect_data_process():
     try:
+        # 获取测试应用的包名和版本号，存到数据库中
+        version_code = AdbUtil.get_verson(package_name)
+        common_data_list.append([package_name, version_code, ''])
+        __save_package_version()
         # 创建进程池来执行进程
         # result = None
         pool = multiprocessing.Pool(processes=6)
@@ -91,6 +95,8 @@ def auto_collect_data_process():
 def auto_silent_collect_process():
     try:
         # 创建进程池来执行进程
+        common_data_list.append([package_name, version_code, ''])
+        __save_package_version()
         # result = None
         pool = multiprocessing.Pool(processes=2)
         # result = pool.apply_async(run_monkey, (config.test_package_name(), RUN_MONKEY_COUNT,))
@@ -725,6 +731,8 @@ def __publish_silent_flow_data():
 def __publish_silent_cpu_data():
     CpuSilentData().save_db_silent_data(cpu_silent_data_dict, package_name, version_code)
 
+def __save_package_version():
+    CommonData().save_data(common_data_list)
 
 if __name__ == '__main__':
     # print cpu_count()

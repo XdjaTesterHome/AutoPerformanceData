@@ -64,6 +64,15 @@ class FpsData(models.Model):
         for fps_data in fps_data_list:
             result_fps_list.append([fps_data.currentPage, fps_data.fps, fps_data.jankCount])
         return result_fps_list
+    """
+        根据packageName和version筛选数据
+    """
+    def get_data_with_pkg_version(self, package_name, version):
+        fps_data_list = FpsData.objects.filter(packageName=package_name, versionCode=version)
+        result_fps_list = [[u'当前页面', u'平均fps值', u'平均丢帧数目']]
+        for fps_data in fps_data_list:
+            result_fps_list.append([fps_data.currentPage, fps_data.fps, fps_data.jankCount])
+        return result_fps_list
 
 
 """
@@ -125,7 +134,15 @@ class CpuData(models.Model):
         for cpu_data in cpu_data_list:
             result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
         return result_cpu_list
-
+    """
+        根据packageName和version筛选数据
+    """
+    def get_data_with_pkg_version(self, package_name, version):
+        cpu_data_list = CpuData.objects.filter(packageName=package_name, versionCode=version)
+        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
+        for cpu_data in cpu_data_list:
+            result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
+        return result_cpu_list
 
 """
     用于存放kpi数据
@@ -183,6 +200,16 @@ class KpiData(models.Model):
 
     def get_data_by_package_name(self, package_name):
         kpi_data_list = KpiData.objects.filter(packageName=package_name)
+        result_kpi_list = [[u'当前页面', u'加载时间(ms)']]
+        for kpi_data in kpi_data_list:
+            result_kpi_list.append([kpi_data.currentPage, kpi_data.kpi])
+        return result_kpi_list
+
+    """
+        根据packageName和version筛选数据
+    """
+    def get_data_with_pkg_version(self, package_name, version):
+        kpi_data_list = KpiData.objects.filter(packageName=package_name, versionCode=version)
         result_kpi_list = [[u'当前页面', u'加载时间(ms)']]
         for kpi_data in kpi_data_list:
             result_kpi_list.append([kpi_data.currentPage, kpi_data.kpi])
@@ -246,6 +273,15 @@ class MemoryData(models.Model):
             result_memory_list.append([memory_data.currentPage, memory_data.memory_increase])
         return result_memory_list
 
+    """
+        根据packageName和version筛选数据
+    """
+    def get_data_with_pkg_version(self, package_name, version):
+        memory_data_list = MemoryData.objects.filter(packageName=package_name, versionCode=version)
+        result_memory_list = [[u'当前页面', u'内存增量(KB)']]
+        for memory_data in memory_data_list:
+            result_memory_list.append([memory_data.currentPage, memory_data.memory_increase])
+        return result_memory_list
 
 """
     用于存放flow数据
@@ -321,6 +357,15 @@ class FlowData(models.Model):
             result_flow_list.append([flow_data.currentPage, flow_data.flowIncrease])
         return result_flow_list
 
+    """
+        根据packageName和version筛选数据
+    """
+    def get_data_with_pkg_version(self, package_name, version):
+        flow_data_list = FlowData.objects.filter(packageName=package_name, versionCode=version)
+        result_flow_list = [[u'当前页面', u'流量增量(KB)']]
+        for flow_data in flow_data_list:
+            result_flow_list.append([flow_data.currentPage, flow_data.flowIncrease])
+        return result_flow_list
 
 """
     用于存放静默状态cpu数据
@@ -376,6 +421,15 @@ class CpuSilentData(models.Model):
             result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
         return result_cpu_list
 
+    """
+        根据packageName和version筛选数据
+    """
+    def get_data_with_pkg_version(self, package_name, version):
+        cpu_data_list = CpuSilentData.objects.filter(packageName=package_name, versionCode=version)
+        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
+        for cpu_data in cpu_data_list:
+            result_cpu_list.append([cpu_data.currentPage, cpu_data.cpu])
+        return result_cpu_list
 
 """
     用于存放静默状态flow数据
@@ -432,6 +486,15 @@ class FlowSilentData(models.Model):
             result_flow_list.append([flow_data.currentPage, flow_data.flow])
         return result_flow_list
 
+    """
+        根据packageName和version筛选数据
+    """
+    def get_data_with_pkg_version(self, package_name, version):
+        flow_data_list = FlowSilentData.objects.filter(packageName=package_name, versionCode=version)
+        result_flow_list = [[u'当前页面', u'流量值']]
+        for flow_data in flow_data_list:
+            result_flow_list.append([flow_data.currentPage, flow_data.flow])
+        return result_flow_list
 
 """
     用于存放flow数据
@@ -492,6 +555,15 @@ class BatteryData(models.Model):
             result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.batteryUse])
         return result_battery_list
 
+    """
+        根据packageName和version筛选数据
+    """
+    def get_data_with_pkg_version(self, package_name, version):
+        battery_data_list = BatteryData.objects.filter(packageName=package_name, versionCode=version)
+        result_battery_list = [[u'Uid', u'应用包名', u'耗电量情况']]
+        for battery_data in battery_data_list:
+            result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.batteryUse])
+        return result_battery_list
 
 """
     用于存放测试应用公共数据
@@ -528,6 +600,27 @@ class CommonData(models.Model):
         result_common_list = []
         for common_data in common_data_list:
             result_common_list.append([common_data.packageName, common_data.packageVersion, common_data.batteryFilePath])
+        return result_common_list
+
+    """
+        获取所有的packageName
+    """
+    def get_all_package_name(self):
+        common_data_list = CommonData.objects.all()
+        result_common_list = []
+        for common_data in common_data_list:
+            result_common_list.append(common_data.packageName)
+        return result_common_list
+
+    """
+        根据包名获取所有的版本信息
+    """
+    def get_all_version_by_package_name(self, package_name):
+        common_versions = CommonData.objects.filter(packageName=package_name)
+        result_common_list = []
+        for common_version in common_versions:
+            result_common_list.append(common_version.packageVersion)
+
         return result_common_list
 
     def __unicode__(self):

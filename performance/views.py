@@ -24,10 +24,10 @@ def get_fps(request):
     fps_list = FpsData().get_all_data()
     return render(request, 'get_fps.html', {'fps_list': json.dumps(fps_list)})
 
-def get_fps_data(request, package_name):
+def get_fps_data(request, package_name, version_name):
     # print 'package_name' + package_name
     if package_name != '':
-        fps_list = FpsData().get_data_by_package_name(package_name)
+        fps_list = FpsData().get_data_with_pkg_version(package_name, version_name)
     else:
         fps_list = FpsData().get_all_data()
     fps_json_list = {'fps_list': fps_list}
@@ -37,9 +37,9 @@ def get_memory(request):
     memory_list = MemoryData().get_all_data()
     return render(request, 'get_memory.html', {'Memory_list': json.dumps(memory_list)})
 
-def get_memory_data(request, package_name):
+def get_memory_data(request, package_name, version_name):
     if package_name != '':
-        memory_list = MemoryData().get_data_by_package_name(package_name)
+        memory_list = MemoryData().get_data_with_pkg_version(package_name, version_name)
     else:
         memory_list = MemoryData().get_all_data()
 
@@ -50,9 +50,9 @@ def get_cpu(request):
     cpu_list = CpuData().get_all_data()
     return render(request, 'get_cpu.html', {'CPU_list': json.dumps(cpu_list)})
 
-def get_cpu_data(request, package_name):
+def get_cpu_data(request, package_name, version_name):
     if package_name != '':
-        cpu_list = CpuData().get_data_by_package_name(package_name)
+        cpu_list = CpuData().get_data_with_pkg_version(package_name, version_name)
     else:
         cpu_list = CpuData().get_all_data()
     cpu_json_list = {'cpu_list': cpu_list}
@@ -62,9 +62,9 @@ def get_flow(request):
     flow_list = FlowData().get_all_data()
     return render(request, 'get_flow.html', {'Flow_list': json.dumps(flow_list)})
 
-def get_flow_data(request, package_name):
+def get_flow_data(request, package_name, version_name):
     if package_name != '':
-        flow_list = FlowData().get_data_by_package_name(package_name)
+        flow_list = FlowData().get_data_with_pkg_version(package_name, version_name)
     else:
         flow_list = FlowData().get_all_data()
     flow_json_list = {"flow_list": flow_list}
@@ -74,21 +74,21 @@ def get_kpi(request):
     kpi_list = KpiData().get_all_data()
     return render(request, 'get_kpi.html', {'Kpi_list': json.dumps(kpi_list)})
 
-def get_kpi_data(request, package_name):
+def get_kpi_data(request, package_name, version_name):
     if package_name != '':
-        kpi_list = KpiData().get_data_by_package_name(package_name)
+        kpi_list = KpiData().get_data_with_pkg_version(package_name, version_name)
     else:
         kpi_list = KpiData().get_all_data()
-    kpi_json_list = {'kpi_list':kpi_list}
+    kpi_json_list = {'kpi_list': kpi_list}
     return JsonResponse(kpi_json_list)
 
 def get_silent_cpu(request):
     cpu_list = CpuSilentData().get_all_data()
     return render(request, 'get_kpi.html', {'cpu_list': json.dumps(cpu_list)})
 
-def get_silent_cpu_data(request, package_name):
+def get_silent_cpu_data(request, package_name, version_name):
     if package_name != '':
-        cpu_list = CpuSilentData().get_data_by_package_name(package_name)
+        cpu_list = CpuSilentData().get_data_with_pkg_version(package_name, version_name)
     else:
         cpu_list = CpuSilentData().get_all_data()
     cpu_json_list = {'cpu_list': cpu_list}
@@ -98,9 +98,9 @@ def get_silent_flow(request):
     flow_list = FlowSilentData().get_all_data()
     return render(request, 'get_kpi.html', {'flow_list': json.dumps(flow_list)})
 
-def get_silent_flow_data(request, package_name):
+def get_silent_flow_data(request, package_name, version_name):
     if package_name != '':
-        flow_list = FlowSilentData().get_data_by_package_name(package_name)
+        flow_list = FlowSilentData().get_data_with_pkg_version(package_name, version_name)
     else:
         flow_list = FlowSilentData().get_all_data()
     flow_json_list = {'flow_list': flow_list}
@@ -108,9 +108,9 @@ def get_silent_flow_data(request, package_name):
 
 def get_power(request):
     return render(request, 'get_power.html')
-def get_power_data(request, package_name):
+def get_power_data(request, package_name, version_name):
     if package_name != '':
-        battery_list = BatteryData().get_data_by_package_name(package_name)
+        battery_list = BatteryData().get_data_with_pkg_version(package_name, version_name)
     else:
         battery_list = BatteryData().get_all_data()
     battery_json_list = {'battery_list': battery_list}
@@ -122,12 +122,20 @@ def get_silence_cpu(request):
 def get_silence_flow(request):
     return render(request, 'flow_silence_info.html')
 
-#get_test方法用于前端网页调试#
-
+"""
+    用于获取所有的包名信息
+"""
 def get_test_package_name(request):
-    data = {'package_name': ['com.xdja.HDSafeEMailClient', 'com.xdja.safekeyservice']}
+    package_list = CommonData().get_all_package_name()
+    data = {'package_name': package_list}
     return JsonResponse(data)
-
+"""
+    根据包名来查找version
+"""
+def get_test_package_version(request, package_name):
+    version_list = CommonData().get_all_version_by_package_name(package_name)
+    data = {'version_list': version_list}
+    return JsonResponse(data)
 
 # get_test方法用于前端网页调试#
 def get_test(request):

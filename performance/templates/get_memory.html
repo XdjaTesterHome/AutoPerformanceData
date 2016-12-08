@@ -3,7 +3,8 @@
     <script>
         function add() {
             var package_name = localStorage.getItem("package_name");
-            $.get('/performance/getMemData/' + package_name).done(function (data) {
+            var version_name = localStorage.getItem("version");
+            $.get('/performance/getMemData/' + package_name + '/' + version_name).done(function (data) {
                 var Memory_list = data["memory_list"]
                 var tbl = document.getElementById("tad");
                 for (var i = 0; i < Memory_list.length; i++) {

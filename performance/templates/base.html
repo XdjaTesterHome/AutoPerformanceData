@@ -27,17 +27,31 @@
                     <li><a href="{% url 'cpu_silence_info' %}">cpu静默</a></li>
                     <li><a href="{% url 'flow_silence_info' %}">流量静默</a></li>
                 </ul>
-                 <ul class="nav navbar-nav navbar-right" >
-                        <li class="dropdown" id = "choose_package">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="choosepkg()" id="package_value">
-                                请选择包名  <b class="caret"></b>
-                            </a>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown" id="choose_version">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="chooseVersion()"
+                           id="version_value">
+                            请选择版本号 <b class="caret"></b>
+                        </a>
 
-                            <ul class="dropdown-menu" id="choose_package_content">
+                        <ul class="dropdown-menu" id="choose_version_content">
 
-                            </ul>
-                        </li>
-                    </ul>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown" id="choose_package">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="choosepkg()"
+                           id="package_value">
+                            请选择包名 <b class="caret"></b>
+                        </a>
+
+                        <ul class="dropdown-menu" id="choose_package_content">
+
+                        </ul>
+                    </li>
+                </ul>
+
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>

@@ -3,8 +3,9 @@
     <script>
         function add() {
             var package_name = localStorage.getItem("package_name");
-            $.get('/performance/getFlowData/' + package_name).done(function (data) {
-                var Flow_list = data["flow_list"]
+            var version_name = localStorage.getItem("version");
+            $.get('/performance/getFlowData/' + package_name + '/' + version_name).done(function (data) {
+                var Flow_list = data["flow_list"];
                 var tbl = document.getElementById("tad");
                 for (var i = 0; i < Flow_list.length; i++) {
                     var obj = tbl.insertRow(tbl.rows.length);
