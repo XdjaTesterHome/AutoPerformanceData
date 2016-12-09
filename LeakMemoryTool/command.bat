@@ -1,5 +1,8 @@
 @echo off
 echo 开始执行leakcanary自动化脚本....
+cp ../command.py .
+cp ../LeakCanaryApplication.java .
+cp ../LeakUploadService.java .
 sed -i "/dependencies/a\debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'" ./app/build.gradle
 sed -i "/dependencies/a\releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'" ./app/build.gradle
 sed -i "/dependencies/a\testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'" ./app/build.gradle
