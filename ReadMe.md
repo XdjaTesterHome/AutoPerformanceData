@@ -11,3 +11,4 @@
 - python manage.py dumpdata appname > appname.json
   python manage.py loaddata appname.json   数据导入数据迁移
 - python manage.py 可以查看更多命令
+- python manage.py collectstatic  收集静态文件到配置的静态目录STATIC_ROOT下

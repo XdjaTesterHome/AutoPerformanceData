@@ -12,10 +12,10 @@ date:2016/11/23
 log_switch = True
 
 # 采集数据时长
-collect_data_time = 10
+collect_data_time = 50
 
 # 采集数据次数
-collect_data_count = 10
+collect_data_count = 50
 
 # 采集数据的时间间隔
 collect_data_interval = collect_data_count / collect_data_time
@@ -24,7 +24,7 @@ collect_data_interval = collect_data_count / collect_data_time
 retry_count = 100
 
 # 要测试的App的包名
-test_package_name = 'com.xdja.safekeyservice'
+test_package_name = 'com.xdja.HDSafeEMailClient'
 
 # 是否结束的标志
 run_finish = False
