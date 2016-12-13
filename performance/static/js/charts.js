@@ -1,7 +1,3 @@
-/**
- * Created by SvenWeng on 16/4/12.
- */
-
 $(document).ready(function () {
     //内存信息获取
     $('#mem_query').click(function () {
