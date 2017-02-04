@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '*gz_*tgtiuz%!w57b0ow*v@e_$5$h!^_5fb!ggl+h!zdpl48hq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['xdjaperformance.com',  # Allow domain and subdomains
                  'localhost',  # Also allow FQDN and subdomains
@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'AutoPerformanceData.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'performanceData',
+        'NAME': 'performancedata',
         'USER': 'xdja',
         'PASSWORD': '123456',
         'HOST': '11.12.109.38',

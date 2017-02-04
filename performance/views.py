@@ -132,17 +132,10 @@ def get_test_package_name(request):
     根据包名来查找version
 """
 def get_test_package_version(request, package_name):
-    version_list = CommonData.get_all_version_by_package_name()
+    version_list = CommonData.get_all_version_by_package_name(package_name)
     data = {'version_list': version_list}
     return JsonResponse(data)
 
-# get_test方法用于前端网页调试#
-def get_test(request):
-    # if request.method == "POSt":
-    #     p = te.test()
-    #     return HttpResponse(int(p))
-    # else:
-        return render(request, 'test.html')
 
 def upload_file(request):
     # if not request.user.is_superuser:

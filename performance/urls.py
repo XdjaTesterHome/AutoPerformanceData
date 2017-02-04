@@ -26,7 +26,6 @@ urlpatterns = [
     url(r'^getKpiData/(?P<package_name>\S+)/(?P<version_name>\S+)/', views.get_kpi_data, name='get_kpi_data'),
     url(r'^getPower/', views.get_power, name='battery_info'),
     url(r'^getPowerData/(?P<package_name>\S+)/(?P<version_name>\S+)/', views.get_power_data, name='get_power_data'),
-    url(r'^test/', views.get_test, name='test'),#用于前端展示调试界面
     url(r'^getsilencecpu/', views.get_silence_cpu, name='cpu_silence_info'),
     url(r'^getsilenceflow/', views.get_silence_flow, name='flow_silence_info'),
     url(r'^getsilencecpudata/(?P<package_name>\S+)/(?P<version_name>\S+)/', views.get_silent_cpu_data, name='get_silent_cpu_data'),
