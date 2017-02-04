@@ -18,7 +18,7 @@ from monkey.Monkey import Monkey
 from util.AdbUtil import AdbUtil
 from util.AndroidUtil import AndroidUtil
 from util.LogUtil import LogUtil
-from performance.models import *
+from performance.models1 import *
 
 __author__ = 'zhouliwei'
 

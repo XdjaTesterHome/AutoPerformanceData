@@ -6,10 +6,10 @@ from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
 import tests as te
-from models import *
+from models1 import *
 import json
 import os
-from models import CommonData
+from models1 import CommonData
 
 def home(request):
     return render(request, 'home.html')

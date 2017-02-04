@@ -1,6 +1,6 @@
 #!/usr/bin/env python      
 # -*- coding: utf-8 -*-
-import os, sys
+import os, sys,re
 import django
 
 BaseDir = os.path.dirname(os.path.abspath(os.getcwd()))
@@ -11,7 +11,7 @@ django.setup()
 from util.AdbUtil import AdbUtil
 from util.LogUtil import LogUtil
 import common.GlobalConfig as config
-from performance.models import BatteryData
+from performance.models1 import BatteryData
 import util.UploadFileUtil as loadFile
 __author__ = 'zhouliwei'
 
@@ -34,6 +34,7 @@ def get_battery_data():
     if not os.path.exists(data_folder):
         os.mkdir(data_folder)
     battery_data = AdbUtil.get_battery_data(package_name)
+    # print "battery_data0:", battery_data
     # 现将结果写入到txt中
     fo = open(data_folder + '/batterystats.txt', 'wb')
     fo.write(battery_data)
@@ -42,11 +43,17 @@ def get_battery_data():
     # 解析采集的电量数据
     # 思路是：每种数据之间会有空格分隔，以空格作为分隔
     battery_data = battery_data.split('Estimated power use (mAh):')[1].strip()
+    # print "battery_data0:",battery_data
+    # battery_data = battery_data.split('\r\n')
     battery_data = battery_data.split('\r\n')
+    # pattern = re.compile(r'.*', re.DOTALL)
+    # match = pattern.findall(battery_data)
+    # print "battery_data:", battery_data
 
     pkg_name = ''
     compute_drain = ''
     actual_drain = ''
+
     for i in range(len(battery_data)):
         # 处理整体电流情况
         if i == 0:
@@ -64,14 +71,18 @@ def get_battery_data():
         # 处理uid，查找出packagename
         if uid is not None and 'Uid' in uid:
             uid_uid = uid.split(' ')[1]
+            # print "uid_uid:",uid_uid
             if 'u0' in uid_uid:
                 uid_uid = 'u0_' + uid_uid[2:]
+                # uid_uid = 'u0_' + uid_uid[1:]
+                # print "uid_uid1:", uid_uid
                 pkg_name = AdbUtil.get_package_name_by_uid(uid_uid)
         battery_str_data = battery_strs[1]
         battery_excel_data.append([uid, pkg_name, battery_str_data])
         pkg_name = ''
         i += 1
-    return compute_drain, actual_drain, battery_excel_data
+    # return compute_drain, actual_drain, battery_excel_data
+    return battery_excel_data
 
 def publish_battery_data():
     if len(battery_excel_data) < 1:
@@ -81,11 +92,11 @@ def publish_battery_data():
 
 
 if __name__ == '__main__':
-    LogUtil.log_i('begin collect battery data.....')
-    get_battery_data()
-    LogUtil.log_i('begin save battery data.....')
-    publish_battery_data()
-    LogUtil.log_i('upload battery data.....')
+    # LogUtil.log_i('begin collect battery data.....')
+    print (get_battery_data())
+    # LogUtil.log_i('begin save battery data.....')
+    # publish_battery_data()
+    # LogUtil.log_i('upload battery data.....')
     #
     # loadFile.upload_file(data_folder+'\\batterystats.txt', package_name, AdbUtil.get_verson(package_name))
     # LogUtil.log_i('finish collect battery data.....')

@@ -256,6 +256,7 @@ class AdbUtil(object):
     def get_package_name_by_uid(uid):
         try:
             cmd = 'adb shell ps | findStr %s' % uid
+            # print "cmd:",cmd
             results = os.popen(cmd, "r")
             package_name = ''
             while 1:
@@ -274,5 +275,6 @@ class AdbUtil(object):
             LogUtil.log_e('get packageName by uid' + e.message)
 
 if __name__ == '__main__':
-    print AdbUtil().get_verson("com.xdja.safekeyservice")
+    # print AdbUtil().get_verson("com.xdja.safekeyservice")
+    print AdbUtil.get_package_name_by_uid("u0_a56")
     pass
