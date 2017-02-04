@@ -12,10 +12,10 @@ date:2016/11/23
 log_switch = True
 
 # 采集数据时长
-collect_data_time = 50
+collect_data_time = 20
 
 # 采集数据次数
-collect_data_count = 50
+collect_data_count = 20
 
 # 采集数据的时间间隔
 collect_data_interval = collect_data_count / collect_data_time

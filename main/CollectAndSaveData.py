@@ -18,7 +18,7 @@ from monkey.Monkey import Monkey
 from util.AdbUtil import AdbUtil
 from util.AndroidUtil import AndroidUtil
 from util.LogUtil import LogUtil
-from performance.models1 import *
+from performance.models import *
 
 __author__ = 'zhouliwei'
 
@@ -470,6 +470,7 @@ def get_memory_data(pic_name='memory'):
         memory_data = int(AndroidUtil.get_memory_data(package_name))  # 当前采集到的数据
         now_page_name = AndroidUtil.get_cur_activity()
         memory_datas.append([now_page_name, memory_data])
+        print("memory = " + str(memory_data))
         # 内存增量大于某个值就认为是有问题
         if memory_data >= 10 * 1024:
             AdbUtil.screenshot(pic_name)
@@ -734,5 +735,10 @@ def __save_package_version():
 
 if __name__ == '__main__':
     # print cpu_count()
-    get_memory_data()
-    print(memory_datas)
+
+    i = 0
+    while True:
+        if i > 20:
+            break
+        get_memory_data()
+        i += 1

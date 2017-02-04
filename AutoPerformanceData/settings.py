@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'AutoPerformanceData.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'performanceDb',
+        'NAME': 'performanceData',
         'USER': 'xdja',
         'PASSWORD': '123456',
         'HOST': '11.12.109.38',

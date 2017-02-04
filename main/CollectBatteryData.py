@@ -11,7 +11,7 @@ django.setup()
 from util.AdbUtil import AdbUtil
 from util.LogUtil import LogUtil
 import common.GlobalConfig as config
-from performance.models1 import BatteryData
+from performance.models import BatteryData
 import util.UploadFileUtil as loadFile
 __author__ = 'zhouliwei'
 
@@ -88,7 +88,7 @@ def publish_battery_data():
     if len(battery_excel_data) < 1:
         return
     version_code = AdbUtil.get_verson(package_name)
-    BatteryData().save_db_data(battery_excel_data, package_name,version_code)
+    # BatteryData().save_db_data(battery_excel_data, package_name,version_code)
 
 
 if __name__ == '__main__':

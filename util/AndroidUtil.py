@@ -50,6 +50,7 @@ class AndroidUtil(object):
         _end1 = getPIDCpuTime(pid)
         cpuUsage = float((_end1-_start1))/(_end0-_start0)*100#计算当前用户进程CPU的值
         CPU=(float('%.2f'%cpuUsage))#当前被监控应用CPU的值
+        print "cpu = " + str(CPU)
         current_page = AndroidUtil.get_cur_activity()
         return current_page, CPU
         pass
@@ -329,4 +330,9 @@ class AndroidUtil(object):
         AdbUtil.press_power_key()
 
 if __name__ == '__main__':
-    print  AndroidUtil().get_memory_data('com.xdja.HDSafeEMailClient')
+    i = 0
+    while True:
+        if i > 20:
+            break
+        AndroidUtil().get_memory_data('com.xdja.HDSafeEMailClient')
+        i += 1

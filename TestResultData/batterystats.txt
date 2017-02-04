@@ -1,0 +1,129 @@
+Discharge step durations:
+  #0: +3m34s678ms to 81 (power-save-off)
+  #1: +20s29ms to 82 (screen-on, power-save-off)
+  #2: +1m36s372ms to 83 (screen-on, power-save-off)
+  #3: +2m24s562ms to 84 (screen-on, power-save-off)
+  #4: +1m36s378ms to 85 (screen-on, power-save-off)
+  #5: +2m24s590ms to 86 (screen-on, power-save-off)
+  #6: +2m24s780ms to 87 (screen-on, power-save-off)
+  #7: +3m12s985ms to 88 (screen-on, power-save-off)
+  #8: +2m24s595ms to 89 (screen-on, power-save-off)
+  #9: +2m24s595ms to 90 (screen-on, power-save-off)
+  #10: +3m12s762ms to 91 (screen-on, power-save-off)
+  #11: +2m24s562ms to 92 (screen-on, power-save-off)
+
+Statistics since last charge:
+  System starts: 0, currently on battery: false
+  Time on battery: 41m 19s 529ms (96.4%) realtime, 30m 30s 637ms (71.1%) uptime
+  Time on battery screen off: 11m 18s 929ms (26.4%) realtime, 30s 37ms (1.2%) uptime
+  Total run time: 42m 52s 958ms realtime, 32m 4s 67ms uptime
+  Start clock time: 2016-12-14-12-54-27
+  Screen on: 30m 0s 600ms (72.6%) 1x, Interactive: 30m 0s 962ms (72.6%)
+  Screen brightnesses:
+    dark 7s 89ms (0.4%)
+    medium 29m 53s 511ms (99.6%)
+  Total partial wakelock time: 941ms
+  Mobile total received: 0B, sent: 0B (packets received 0, sent 0)
+  Phone signal levels:
+    great 41m 19s 529ms (100.0%) 0x
+  Signal scanning time: 0ms
+  Radio types:
+    none 41m 19s 529ms (100.0%) 0x
+  Mobile radio active time: 0ms (0.0%) 0x
+  Wi-Fi total received: 22.97KB, sent: 9.23KB (packets received 83, sent 79)
+  Wifi on: 41m 19s 529ms (100.0%), Wifi running: 41m 19s 529ms (100.0%)
+  Wifi states: (no activity)
+  Wifi supplicant states:
+    group-handshake 4ms (0.0%) 3x
+    completed 41m 19s 525ms (100.0%) 3x
+  Wifi signal levels:
+    level(4) 41m 19s 529ms (100.0%) 1x
+  Bluetooth on: 0ms (0.0%)
+  Bluetooth states: (no activity)
+
+  Device battery use since last full charge
+    Amount discharged (lower bound): 12
+    Amount discharged (upper bound): 13
+    Amount discharged while screen on: 17
+    Amount discharged while screen off: 1
+
+  Estimated power use (mAh):
+    Capacity: 3000, Computed drain: 491, actual drain: 360-390
+    Uid u0a67: 262
+    Screen: 195
+    Uid 0: 11.5
+    Wifi: 6.89
+    Uid 1000: 5.61
+    Uid u0a68: 4.07
+    Cell standby: 3.44
+    Uid u0a15: 1.17
+    Idle: 1.13
+    Uid u0a7: 0.0707
+    Uid u0a61: 0.0404
+    Uid 1001: 0.0377
+    Uid u0a11: 0.0263
+    Uid 1021: 0.0157
+    Uid 1027: 0.00382
+    Uid u0a5: 0.00344
+    Uid u0a34: 0.00143
+    Uid u0a2: 0.00142
+    Uid u0a23: 0.00142
+    Uid u0a26: 0.00136
+    Uid u0a56: 0.00136
+    Uid u0a38: 0.000681
+    Uid u0a1: 0.000672
+    Over-counted: 101
+
+  1000:
+    User activity: 1 other
+    Wake lock NetworkStats realtime
+    Wake lock *alarm*: 217ms partial (1 times) realtime
+    Wake lock WifiSuspend: 244ms partial (1 times) realtime
+    Wake lock ActivityManager-Sleep: 26ms partial (1 times) realtime
+    TOTAL wake: 487ms partial realtime
+    Sensor 4: 30m 0s 648ms realtime (1 times)
+    Foreground for: 41m 19s 529ms 
+    Proc com.qualcomm.display:
+      CPU: 10ms usr + 0ms krn ; 0ms fg
+    Proc com.quicinc.cne.CNEService:
+      CPU: 480ms usr + 130ms krn ; 0ms fg
+    Proc com.qualcomm.telephony:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc system:
+      CPU: 52s 980ms usr + 13s 720ms krn ; 0ms fg
+    Proc com.qualcomm.wfd.service:wfd_service:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc mm-pp-daemon:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc surfaceflinger:
+      CPU: 2s 400ms usr + 5s 220ms krn ; 0ms fg
+    Proc com.android.settings:
+      CPU: 300ms usr + 120ms krn ; 0ms fg
+    Proc servicemanager:
+      CPU: 60ms usr + 30ms krn ; 0ms fg
+    Proc com.qti.diagservices:
+      CPU: 10ms usr + 20ms krn ; 0ms fg
+    Proc com.qualcomm.location.XT:
+      CPU: 10ms usr + 10ms krn ; 0ms fg
+    Proc imsqmidaemon:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc com.qualcomm.qti.services.secureui:sui_service:
+      CPU: 10ms usr + 10ms krn ; 0ms fg
+    Proc com.qualcomm.qualcommsettings:
+      CPU: 10ms usr + 0ms krn ; 0ms fg
+    Apk com.adups.fota.sysoper:
+      (nothing executed)
+    Apk android:
+      2 wakeup alarms
+  u0a68:
+    Wi-Fi network: 20.27KB received, 8.29KB sent (packets 60 received, 65 sent)
+    Wake lock *alarm*: 8ms partial (2 times) realtime
+    Foreground activities: 30m 0s 965ms realtime (1 times)
+    Foreground for: 41m 19s 529ms 
+    Proc com.xdja.HDSafeEMailClient:
+      CPU: 56s 920ms usr + 1s 270ms krn ; 10m 16s 140ms fg
+    Proc com.xdja.HDSafeEMailClient:leakcanary:
+      CPU: 20ms usr + 20ms krn ; 0ms fg
+    Apk com.xdja.HDSafeEMailClient:
+      8 wakeup alarms
+
