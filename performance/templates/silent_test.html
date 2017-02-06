@@ -4,8 +4,16 @@
         function cpu_render() {
             var package_name = localStorage.getItem("package_name");
             var version_name = localStorage.getItem("version");
-            $.get('/performance/getCpuData/' + package_name + '/' + version_name).done(function (data) {
-                var cpuList = data['cpu_list'];
+            $.get('/performance/getsilencecpudata/' + package_name + '/' + version_name).done(function (data) {
+                var cpuList = data["cpu_list"];
+                var tips = null;
+                if (cpuList.length < 1) {
+                    tips = document.getElementById('cpu_no_data');
+                    tips.show();
+                } else {
+                    tips.hide();
+                }
+
                 var ydata = [];
                 var xdata = [];
                 for (var i = 0; i < cpuList.length; i++) {
@@ -102,13 +110,19 @@
         function flow_render() {
             var package_name = localStorage.getItem("package_name");
             var version_name = localStorage.getItem("version");
-            $.get('/performance/getCpuData/' + package_name + '/' + version_name).done(function (data) {
-                var cpuList = data['cpu_list'];
-                var ydata = [];
+            $.get('/performance/getsilenceflowdata/' + package_name + '/' + version_name).done(function (data) {
+                var flowList = data["flow_list"];
+                var tips = null;
+                if (flowList.length < 1) {
+                    tips = document.getElementById('flow_no_data');
+                    tips.show();
+                } else {
+                    tips.hide();
+                }
                 var xdata = [];
-                for (var i = 0; i < cpuList.length; i++) {
+                for (var i = 0; i < flowList.length; i++) {
                     xdata.push(i);
-                    var mdata = cpuList[i][cpuList[i].length - 1];
+                    var mdata = flowList[i][flowList[i].length - 1];
                     if (isNaN(mdata)) {
                         mdata = 0
                     }
@@ -167,13 +181,13 @@
                             showAllSymbol: true,
                             data: (function () {
                                 var d = [];
-                                for (var i = 0; i < cpuList.length; i++) {
-                                    var value = cpuList[i][1];
+                                for (var i = 0; i < flowList.length; i++) {
+                                    var value = flowList[i][1];
                                     if (isNaN(value)) {
                                         value = 0;
                                     }
                                     d.push([xdata[i],
-                                        value, cpuList[i][0]])
+                                        value, flowList[i][0]])
                                 }
                                 return d;
                             })(),
@@ -200,6 +214,10 @@
         cpu_render();
         flow_render();
     </script>
-    <div id="cpu_silent_chart" style="width: 70%;height: 400px; margin: 0 auto"></div>
-    <div id="flow_silent_chart" style="width: 70%;height: 400px; margin: 0 auto"></div>
+    <div id="cpu_silent_chart" style="width: 70%;height: 400px; margin: 0 auto">
+        <h6 id="cpu_no_data" style="color: #cc1111;">没有cpu静默测试数据，请先进行静默测试，采集数据</h6>
+    </div>
+    <div id="flow_silent_chart" style="width: 70%;height: 400px; margin: 0 auto">
+        <h6 id="flow_no_data" style="color: #cc1111;">没有流量静默测试数据，请先进行静默测试，采集数据</h6>
+    </div>
 {% endblock %}
