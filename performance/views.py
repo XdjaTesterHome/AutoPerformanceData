@@ -115,11 +115,8 @@ def get_power_data(request, package_name, version_name):
     battery_json_list = {'battery_list': battery_list}
     return JsonResponse(battery_json_list)
 
-def get_silence_cpu(request):
-    return render(request, 'cpu_silence_info.html')
-
-def get_silence_flow(request):
-    return render(request, 'flow_silence_info.html')
+def get_silent_test(request):
+    return render(request, 'silent_test.html')
 
 """
     用于获取所有的包名信息

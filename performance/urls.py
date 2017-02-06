@@ -26,11 +26,12 @@ urlpatterns = [
     url(r'^getKpiData/(?P<package_name>\S+)/(?P<version_name>\S+)/', views.get_kpi_data, name='get_kpi_data'),
     url(r'^getPower/', views.get_power, name='battery_info'),
     url(r'^getPowerData/(?P<package_name>\S+)/(?P<version_name>\S+)/', views.get_power_data, name='get_power_data'),
-    url(r'^getsilencecpu/', views.get_silence_cpu, name='cpu_silence_info'),
-    url(r'^getsilenceflow/', views.get_silence_flow, name='flow_silence_info'),
-    url(r'^getsilencecpudata/(?P<package_name>\S+)/(?P<version_name>\S+)/', views.get_silent_cpu_data, name='get_silent_cpu_data'),
-    url(r'^getsilenceflowdata/(?P<package_name>\S+)/(?P<version_name>\S+)/', views.get_silent_flow_data, name='get_silent_flow_data'),
+    url(r'^getsilencecpudata/(?P<package_name>\S+)/(?P<version_name>\S+)/', views.get_silent_cpu_data,
+        name='get_silent_cpu_data'),
+    url(r'^getsilenceflowdata/(?P<package_name>\S+)/(?P<version_name>\S+)/', views.get_silent_flow_data,
+        name='get_silent_flow_data'),
     url(r'^getPackageName/', views.get_test_package_name, name='get_package_name'),
     url(r'^getVersion/(?P<package_name>\S+)/', views.get_test_package_version, name='get_version'),
-    url(r'^upload/', views.upload_file, name='upload_file')
+    url(r'^upload/', views.upload_file, name='upload_file'),
+    url(r'^getsilentTest/', views.get_silent_test, name='silent_test')
 ]

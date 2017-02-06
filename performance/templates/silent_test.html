@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block bodycontent %}
+    <script>
+        function cpu_render() {
+            var package_name = localStorage.getItem("package_name");
+            var version_name = localStorage.getItem("version");
+            $.get('/performance/getCpuData/' + package_name + '/' + version_name).done(function (data) {
+                var cpuList = data['cpu_list'];
+                var ydata = [];
+                var xdata = [];
+                for (var i = 0; i < cpuList.length; i++) {
+                    xdata.push(i);
+                    var mdata = cpuList[i][cpuList[i].length - 1];
+                    if (isNaN(mdata)) {
+                        mdata = 0
+                    }
+                    ydata.push(mdata);
+                }
+
+                var option = {
+                    title: {
+                        text: 'cpu静默测试占有率'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return "当前页面：" + params.value[2] + '<br/>' + "cpu占有率：" + params.value[1];
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    {#                    dataZoom: {#}
+                    {#                        show: true,#}
+                    {#                        start: 70#}
+                    {#                    },#}
+                    legend: {
+                        data: ['cpu占有率']
+                    },
+                    grid: {
+                        y2: 80
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: xdata
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                formatter: '{value} %'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'cpu占有率',
+                            type: 'line',
+                            showAllSymbol: true,
+                            data: (function () {
+                                var d = [];
+                                for (var i = 0; i < cpuList.length; i++) {
+                                    var value = cpuList[i][1];
+                                    if (isNaN(value)) {
+                                        value = 0;
+                                    }
+                                    d.push([xdata[i],
+                                        value, cpuList[i][0]])
+                                }
+                                return d;
+                            })(),
+                            markLine: {
+                                data: [{
+                                    name: '不能超过这个cpu值',
+                                    value: 30,
+                                    smooth: true,
+                                    xAxis: 1,
+                                    yAxis: 30
+                                }]
+                            }
+                        }
+                    ]
+                };
+
+                // 设置chart
+                var myChart = echarts.init(document.getElementById('cpu_silent_chart'));
+
+                myChart.setOption(option)
+            });
+        }
+
+        function flow_render() {
+            var package_name = localStorage.getItem("package_name");
+            var version_name = localStorage.getItem("version");
+            $.get('/performance/getCpuData/' + package_name + '/' + version_name).done(function (data) {
+                var cpuList = data['cpu_list'];
+                var ydata = [];
+                var xdata = [];
+                for (var i = 0; i < cpuList.length; i++) {
+                    xdata.push(i);
+                    var mdata = cpuList[i][cpuList[i].length - 1];
+                    if (isNaN(mdata)) {
+                        mdata = 0
+                    }
+                    ydata.push(mdata);
+                }
+
+                var option = {
+                    title: {
+                        text: 'flow静默状态使用情况'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return "当前页面：" + params.value[2] + '<br/>' + "cpu占有率：" + params.value[1];
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    {#                    dataZoom: {#}
+                    {#                        show: true,#}
+                    {#                        start: 70#}
+                    {#                    },#}
+                    legend: {
+                        data: ['流量使用情况']
+                    },
+                    grid: {
+                        y2: 80
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: xdata
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                formatter: '{value} %'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '流量使用情况',
+                            type: 'line',
+                            showAllSymbol: true,
+                            data: (function () {
+                                var d = [];
+                                for (var i = 0; i < cpuList.length; i++) {
+                                    var value = cpuList[i][1];
+                                    if (isNaN(value)) {
+                                        value = 0;
+                                    }
+                                    d.push([xdata[i],
+                                        value, cpuList[i][0]])
+                                }
+                                return d;
+                            })(),
+                            markLine: {
+                                data: [{
+                                    name: '不能超过这个cpu值',
+                                    value: 30,
+                                    smooth: true,
+                                    xAxis: 1,
+                                    yAxis: 30
+                                }]
+                            }
+                        }
+                    ]
+                };
+
+                // 设置chart
+                var myChart = echarts.init(document.getElementById('flow_silent_chart'));
+
+                myChart.setOption(option)
+            });
+        }
+
+        cpu_render();
+        flow_render();
+    </script>
+    <div id="cpu_silent_chart" style="width: 70%;height: 400px; margin: 0 auto"></div>
+    <div id="flow_silent_chart" style="width: 70%;height: 400px; margin: 0 auto"></div>
+{% endblock %}

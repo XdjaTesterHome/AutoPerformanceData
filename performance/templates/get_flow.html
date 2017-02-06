@@ -1,31 +1,104 @@
 {% extends "base.html" %}
 {% block bodycontent %}
     <script>
-        function add() {
+        function data_render() {
             var package_name = localStorage.getItem("package_name");
             var version_name = localStorage.getItem("version");
             $.get('/performance/getFlowData/' + package_name + '/' + version_name).done(function (data) {
-                var Flow_list = data["flow_list"];
-                var tbl = document.getElementById("tad");
-                for (var i = 0; i < Flow_list.length; i++) {
-                    var obj = tbl.insertRow(tbl.rows.length);
-                    for (var k = 0; k < Flow_list[i].length; k++) {
-                        obj.insertCell().innerHTML = Flow_list[i][k];
+                var flowList = data['flow_list'];
+                var ydata = [];
+                var xdata = [];
+                for (var i = 0; i < flowList.length; i++) {
+                    xdata.push(i);
+                    var mdata = flowList[i][flowList[i].length - 1];
+                    if (isNaN(mdata)) {
+                        mdata = 0
                     }
+                    ydata.push(mdata);
                 }
-                var rows = tbl.getElementsByTagName("tr");
-                for (var j = 0; j < rows.length; j++) {
-                    if (Flow_list[j][2] >= 100.00) {
-                        rows[j].style.color = "#f00";
-                    }
-                }
-                rows[0].style.fontWeight = "bold";//加粗表头th字体
+
+                var option = {
+                    title: {
+                        text: '流量使用情况'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return "当前页面：" + params.value[2] + '<br/>' + "消耗流量：" + params.value[1];
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    {#                    dataZoom: {#}
+                    {#                        show: true,#}
+                    {#                        start: 70#}
+                    {#                    },#}
+                    legend: {
+                        data: ['流量使用情况']
+                    },
+                    grid: {
+                        y2: 80
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: xdata
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel:{
+                                formatter:'{value} KB'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '流量使用情况',
+                            type: 'line',
+                            showAllSymbol: true,
+                            data: (function () {
+                                var d = [];
+                                for (var i = 0; i < flowList.length; i++) {
+                                    var value = flowList[i][1];
+                                    if (isNaN(value)) {
+                                        value = 0;
+                                    }
+                                    d.push([xdata[i],
+                                        value, flowList[i][0]])
+                                }
+                                return d;
+                            })(),
+                            markLine: {
+                                data: [{
+                                    name: '流量最大值',
+                                    value: 30,
+                                    smooth: true,
+                                    xAxis: 1,
+                                    yAxis: 30
+                                }]
+                            }
+                        }
+                    ]
+                };
+
+                // 设置chart
+                var myChart = echarts.init(document.getElementById('flow_chart'));
+
+                myChart.setOption(option)
             });
         }
-        add()
+        data_render();
     </script>
-    <h1 id=></h1>
-
-    <table width="70%" border="1px" id="tad" align="center">
-    </table>
+   <div id="flow_chart" style="width: 70%;height: 400px; margin: 0 auto"></div>
 {% endblock %}
