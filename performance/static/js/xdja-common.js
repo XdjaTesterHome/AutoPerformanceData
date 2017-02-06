@@ -23,6 +23,22 @@ function choosepkg() {
                     localStorage.setItem("package_name", package_name);
                     // window.global_package_name = this.innerHTML
                     window.location.reload();
+
+                    //根据包名查询版本号
+                    var arrversion = []
+                    $.getJSON('/performance/getVersion/' + package_name + '/', function (data) {
+                    $.each(data['version_list'], function (i,val) {
+                        var li = document.createElement("li");
+                        li.setAttribute("id", "version" + i);
+                        li.innerHTML = val;
+                        arrversion.push(val);
+                        var version = arrversion[0];
+                        localStorage.setItem("version", version);
+                        $("#version_value").text(version).append('<b class="caret"></b>');
+                        window.location.reload();
+                    });});
+
+
                 };
                 $("#choose_package_content").append(li).append('<li class="divider"></li>');
                 // $("#choose_package_content").append('<li> <a href="#">' + val + '</a> </li>').append('<li class="divider"></li>');
