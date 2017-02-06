@@ -1,43 +1,89 @@
 {% extends "base.html" %}
 {% block bodycontent %}
     <script>
-        function add() {
+        function renderData() {
             var package_name = localStorage.getItem("package_name");
             var version_name = localStorage.getItem("version");
-            $.get('/performance/getFpsData/' + package_name+'/'+version_name).done(function (data) {
-                var fps_list = data["fps_list"]
-                var tbl = document.getElementById("tad");
-                for (var i = 0; i < fps_list.length; i++) {
-                    var obj = tbl.insertRow(tbl.rows.length);
-                    for (var k = 0; k < fps_list[i].length; k++) {
-                        obj.insertCell().innerHTML = fps_list[i][k];
-                    }
+            $.get('/performance/getFpsData/' + package_name + '/' + version_name).done(function (data) {
+                var fpsList = data["fps_list"];
+                var xdata = [];
+                var ydata = [];
+                for (var i = 0; i < fpsList.length; i++) {
+                    xdata.push(fpsList[i][0]);
+                    ydata.push(fpsList[i][1]);
                 }
-                var rows = tbl.getElementsByTagName("tr");
-                for (var j = 0; j < rows.length; j++) {
-                    //暂定fps的规则是帧率小于35，丢帧数目大于10帧
-                    if (fps_list[j][1] <= 35 || fps_list[j][2] >= 10) {
-                        rows[j].style.color = "#f00";//调整表格内字体颜色
 
-                    }
-                }
-                rows[0].style.fontWeight = "bold";//加粗表头th字体
+                var option = {
+                    title: {
+                        text: '页面流畅度'
+                    },
+                    color: ['#3398DB'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: xdata,
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                formatter: '{value} ms'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '页面流畅度',
+                            type: 'bar',
+                            barWidth: '60%',
+                            data: ydata,
+                            markLine: {
+                                data: [{
+                                    name: '页面流畅度最小值',
+                                    value: 40,
+                                    smooth: true,
+                                    xAxis: 1,
+                                    yAxis: 40
+                                }]
+                            }
+                        }
+                    ]
+                };
+                var myChart = echarts.init(document.getElementById('fps_chart'));
+                myChart.setOption(option);
+
+
             });
         }
-        add()
+
+        renderData();
     </script>
 
-    <div class="panel panel-warning">
-        <div class="panel-heading">
-            <h2 class="panel-title">温馨提示:</h2>
-        </div>
-        <div class="panel-body">
-            <strong>测试页面帧率时，请在手机开发者选项—GPU呈现模式分析 勾选【在 adb shell dumpsys gfxinfo中】</strong><br />
-        </div>
-    </div>
-    <h1 id=></h1>
-
-    <table width="70%" border="1px" id="tad" align="center">
-    </table>
-
+    <div id="fps_chart" style="width: 70%;height: 400px; margin: 0 auto; background-color: #a6e1ec"></div>
 {% endblock %}

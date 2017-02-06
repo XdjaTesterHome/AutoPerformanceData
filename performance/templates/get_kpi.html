@@ -1,33 +1,89 @@
 {% extends "base.html" %}
 {% block bodycontent %}
     <script>
-        function add() {
+        function renderData() {
             var package_name = localStorage.getItem("package_name");
             var version_name = localStorage.getItem("version");
-            $.get('/performance/getKpiData/' + package_name+'/'+version_name).done(function (data) {
-                var Kpi_list = data["kpi_list"];
-                var tbl = document.getElementById("tad");
-                for (var i = 0; i < Kpi_list.length; i++) {
-                    var obj = tbl.insertRow(tbl.rows.length);
-                    for (var k = 0; k < Kpi_list[i].length; k++) {
-                        obj.insertCell().innerHTML = Kpi_list[i][k];
-                    }
+            $.get('/performance/getKpiData/' + package_name + '/' + version_name).done(function (data) {
+                var kpiList = data["kpi_list"];
+                var xdata = [];
+                var ydata = [];
+                for (var i = 0; i < kpiList.length; i++) {
+                    xdata.push(kpiList[i][0]);
+                    ydata.push(kpiList[i][1]);
                 }
-                var rows = tbl.getElementsByTagName("tr");
-                for (var j = 0; j < rows.length; j++) {
-                    //kpi暂时将超过2s加载时间的定义为有问题的
-                    if (Kpi_list[j][1] >= 2000) {
-                        rows[j].style.color = "#f00";
-                    }
-                }
-                rows[0].style.fontWeight = "bold";//加粗表头th字体
+
+                var option = {
+                    title: {
+                        text: '页面加载时间'
+                    },
+                    color: ['#3398DB'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: xdata,
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                formatter: '{value} ms'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '页面加载时间',
+                            type: 'bar',
+                            barWidth: '60%',
+                            data: ydata,
+                             markLine: {
+                                data: [{
+                                    name: '页面加载时间最大值',
+                                    value: 3000,
+                                    smooth:true,
+                                    xAxis:1,
+                                    yAxis: 3000
+                                }]
+                            }
+                        }
+                    ]
+                };
+                var myChart = echarts.init(document.getElementById('kpi_chart'));
+                myChart.setOption(option);
+
+
             });
         }
-        add()
+
+        renderData();
     </script>
 
-    <h1 id=></h1>
-
-    <table width="70%" border="1px" id="tad" align="center">
-    </table>
+    <div id="kpi_chart" style="width: 70%;height: 400px; margin: 0 auto"></div>
 {% endblock %}

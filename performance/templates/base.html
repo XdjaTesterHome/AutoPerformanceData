@@ -17,11 +17,11 @@
 <body onload="loadData()">
 <div style="text-align: center;">
     <nav class="navbar navbar-default">
-        <div class="container-fluid">
+        <div class="container-fluid" >
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="text-align: center;">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="text-align: center; background-color: #245269">
                 <ul class="nav navbar-nav" style="display: inline-block; float:none; font-size:15px;">
-                    <li><a href="{% url 'home' %}">首页</a></li>
+                    <li><a href="{% url 'home' %}" >首页</a></li>
                     <li><a href="{% url 'memory_info' %}">内存数据</a></li>
                     <li><a href="{% url 'cpu_info' %}">cpu数据</a></li>
                     <li><a href="{% url 'flow_info' %}">流量数据</a></li>

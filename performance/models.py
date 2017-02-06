@@ -44,7 +44,7 @@ class FpsData(models.Model):
     @staticmethod
     def get_all_data():
         fps_data_list = FpsData.objects.all()
-        result_fps_list = [[u'当前页面', u'平均fps值', u'平均丢帧数目']]
+        result_fps_list = []
         for fps_data in fps_data_list:
             result_fps_list.append([fps_data.page, fps_data.testvalue])
         return result_fps_list
@@ -56,9 +56,9 @@ class FpsData(models.Model):
     @staticmethod
     def get_data_with_pkg_version(package_name, version):
         fps_data_list = FpsData.objects.filter(package=package_name, version=version)
-        result_fps_list = [[u'当前页面', u'平均fps值']]
+        result_fps_list = []
         for fps_data in fps_data_list:
-            result_fps_list.append([fps_data.page, fps_data.fps])
+            result_fps_list.append([fps_data.page, fps_data.testvalue])
         return result_fps_list
 
 
@@ -94,7 +94,7 @@ class KpiData(models.Model):
     @staticmethod
     def get_all_data():
         kpi_data_list = KpiData.objects.all()
-        result_kpi_list = [[u'当前页面', u'加载时间(ms)']]
+        result_kpi_list = []
         for kpi_data in kpi_data_list:
             result_kpi_list.append([kpi_data.page, kpi_data.testvalue])
         return result_kpi_list
@@ -106,7 +106,7 @@ class KpiData(models.Model):
     @staticmethod
     def get_data_with_pkg_version(package_name, version):
         kpi_data_list = KpiData.objects.filter(package=package_name, version=version)
-        result_kpi_list = [[u'当前页面', u'加载时间(ms)']]
+        result_kpi_list = []
         for kpi_data in kpi_data_list:
             result_kpi_list.append([kpi_data.page, kpi_data.testvalue])
         return result_kpi_list
@@ -143,7 +143,7 @@ class FlowData(models.Model):
     @staticmethod
     def get_all_data():
         flow_data_list = FlowData.objects.all()
-        result_flow_list = [[u'当前页面', u'流量消耗(KB)']]
+        result_flow_list = []
         for flow_data in flow_data_list:
             result_flow_list.append([flow_data.page, flow_data.testvalue])
         return result_flow_list
@@ -155,7 +155,7 @@ class FlowData(models.Model):
     @staticmethod
     def get_data_with_pkg_version(package_name, version):
         flow_data_list = FlowData.objects.filter(package=package_name, version=version)
-        result_flow_list = [[u'当前页面', u'流量增量(KB)']]
+        result_flow_list = []
         for flow_data in flow_data_list:
             result_flow_list.append([flow_data.page, flow_data.testvalue])
         return result_flow_list
@@ -192,7 +192,7 @@ class FlowSilentData(models.Model):
     @staticmethod
     def get_all_slient_data():
         flow_data_list = FlowSilentData.objects.all()
-        result_flow_list = [[u'当前页面', u'流量值']]
+        result_flow_list = []
         for flow_data in flow_data_list:
             result_flow_list.append([flow_data.page, flow_data.testvalue])
         return result_flow_list
@@ -204,7 +204,7 @@ class FlowSilentData(models.Model):
     @staticmethod
     def get_data_with_pkg_version(package_name, version):
         flow_data_list = FlowSilentData.objects.filter(package=package_name, version=version)
-        result_flow_list = [[u'当前页面', u'流量值']]
+        result_flow_list = []
         for flow_data in flow_data_list:
             result_flow_list.append([flow_data.page, flow_data.testvalue])
         return result_flow_list
@@ -241,7 +241,7 @@ class BatteryData(models.Model):
     @staticmethod
     def get_all_data():
         battery_data_list = BatteryData.objects.all()
-        result_battery_list = [[u'Uid', u'应用包名', u'耗电量情况']]
+        result_battery_list = []
         for battery_data in battery_data_list:
             result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.testvalue])
         return result_battery_list
@@ -253,7 +253,7 @@ class BatteryData(models.Model):
     @staticmethod
     def get_data_with_pkg_version(package_name, version):
         battery_data_list = BatteryData.objects.filter(package=package_name, version=version)
-        result_battery_list = [[u'Uid', u'应用包名', u'耗电量情况']]
+        result_battery_list = []
         for battery_data in battery_data_list:
             result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.testvalue])
         return result_battery_list
@@ -348,7 +348,7 @@ class MemoryData(models.Model):
     @staticmethod
     def get_all_data():
         memory_data_list = MemoryData.objects.all()
-        result_memory_list = [[u'当前页面', u'内存增量(KB)']]
+        result_memory_list = []
         for memory_data in memory_data_list:
             result_memory_list.append([memory_data.page, memory_data.testvalue])
         return result_memory_list
@@ -360,7 +360,7 @@ class MemoryData(models.Model):
     @staticmethod
     def get_data_with_pkg_version(package_name, version):
         memory_data_list = MemoryData.objects.filter(package=package_name, version=version)
-        result_memory_list = [[u'当前页面', u'内存增量(KB)']]
+        result_memory_list = []
         for memory_data in memory_data_list:
             result_memory_list.append([memory_data.page, memory_data.testvalue])
         return result_memory_list
@@ -395,7 +395,7 @@ class CpuData(models.Model):
     @staticmethod
     def get_all_data():
         cpu_data_list = CpuData.objects.all()
-        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
+        result_cpu_list = []
         for cpu_data in cpu_data_list:
             result_cpu_list.append([cpu_data.page, cpu_data.testvalue])
         return result_cpu_list
@@ -407,7 +407,7 @@ class CpuData(models.Model):
     @staticmethod
     def get_data_with_pkg_version(package_name, version):
         cpu_data_list = CpuData.objects.filter(package=package_name, version=version)
-        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
+        result_cpu_list = []
         for cpu_data in cpu_data_list:
             result_cpu_list.append([cpu_data.page, cpu_data.testvalue])
         return result_cpu_list
@@ -442,7 +442,7 @@ class CpuSilentData(models.Model):
     @staticmethod
     def get_all_silent_data():
         cpu_data_list = CpuSilentData.objects.all()
-        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
+        result_cpu_list = []
         for cpu_data in cpu_data_list:
             result_cpu_list.append([cpu_data.page, cpu_data.testvalue])
         return result_cpu_list
@@ -454,7 +454,7 @@ class CpuSilentData(models.Model):
     @staticmethod
     def get_data_with_pkg_version(package_name, version):
         cpu_data_list = CpuSilentData.objects.filter(package=package_name, version=version)
-        result_cpu_list = [[u'当前页面', u'平均cpu占有率']]
+        result_cpu_list = []
         for cpu_data in cpu_data_list:
             result_cpu_list.append([cpu_data.page, cpu_data.testvalue])
         return result_cpu_list
