@@ -28,6 +28,7 @@ ALLOWED_HOSTS = ['xdjaperformance.com',  # Allow domain and subdomains
                  'localhost',  # Also allow FQDN and subdomains
                  '11.12.109.38',
                  '127.0.0.1',
+                 "msg-push.duba.net",
                  ]
 
 # Application definition

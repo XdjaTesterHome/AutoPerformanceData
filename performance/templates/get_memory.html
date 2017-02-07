@@ -1,33 +1,105 @@
 {% extends "base.html" %}
 {% block bodycontent %}
     <script>
-        function add() {
-            var package_name = localStorage.getItem("package_name");
+        function data_render() {
+           var package_name = localStorage.getItem("package_name");
             var version_name = localStorage.getItem("version");
             $.get('/performance/getMemData/' + package_name + '/' + version_name).done(function (data) {
-                var Memory_list = data["memory_list"]
-                var tbl = document.getElementById("tad");
-                for (var i = 0; i < Memory_list.length; i++) {
-                    var obj = tbl.insertRow(tbl.rows.length);
-                    for (var k = 0; k < Memory_list[i].length; k++) {
-                        obj.insertCell().innerHTML = Memory_list[i][k];
+                var memoryList = data["memory_list"]
+                var ydata = [];
+                var xdata = [];
+                for (var i = 0; i < memoryList.length; i++) {
+                    xdata.push(i);
+                    var mdata = memoryList[i][memoryList[i].length - 1];
+                    if (isNaN(mdata)) {
+                        mdata = 0
                     }
+                    ydata.push(mdata);
                 }
-                var rows = tbl.getElementsByTagName("tr");
-                for (var j = 0; j < rows.length; j++) {
-                    // 当内存增量大于10M，认为是有问题的
-                    if (Memory_list[j][2] >= 10 * 1024) {
-                        rows[j].style.color = "#f00";
-                    }
-                }
-                rows[0].style.fontWeight = "bold";//加粗表头th字体
+
+                var option = {
+                    title: {
+                        text: '内存分配情况'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.value[2] + '<br/>' + "内存分配值：" + params.value[1];
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    {#                    dataZoom: {#}
+                    {#                        show: true,#}
+                    {#                        start: 70#}
+                    {#                    },#}
+                    legend: {
+                        data: ['内存使用情况']
+                    },
+                    grid: {
+                        y2: 80
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: xdata
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                formatter: '{value} MB'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '内存使用情况',
+                            type: 'line',
+                            showAllSymbol: true,
+                            data: (function () {
+                                var d = [];
+                                for (var i = 0; i < memoryList.length; i++) {
+                                    var value = memoryList[i][1];
+                                    if (isNaN(value)) {
+                                        value = 0;
+                                    }
+                                    d.push([xdata[i],
+                                        value, memoryList[i][0]])
+                                }
+                                return d;
+                            })(),
+                            markLine: {
+                                data: [{
+                                    name: '内存分配最大值',
+                                    value: 30,
+                                    smooth: true,
+                                    xAxis: 1,
+                                    yAxis: 30
+                                }]
+                            }
+                        }
+                    ]
+                };
+
+                // 设置chart
+                var myChart = echarts.init(document.getElementById('memory_chart'));
+
+                myChart.setOption(option)
             });
         }
-        add()
+       data_render();
     </script>
 
-    <h1 id=></h1>
-
-    <table width="70%" border="1px" id="tad" align="center">
-    </table>
+   <div id="memory_chart" style="width: 70%;height: 400px; margin: 0 auto"></div>
 {% endblock %}

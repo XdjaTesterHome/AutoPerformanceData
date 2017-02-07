@@ -69,6 +69,7 @@ function chooseVersion() {
     });
 }
 function loadData() {
+    $('a').css("color","white");
     var package_name = localStorage.getItem("package_name");
     var version_name = localStorage.getItem("version");
     if (package_name != null) {
