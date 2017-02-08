@@ -243,7 +243,7 @@ class BatteryData(models.Model):
         battery_data_list = BatteryData.objects.all()
         result_battery_list = []
         for battery_data in battery_data_list:
-            result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.testvalue])
+            result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.testvalue, battery_data.detailInfo])
         return result_battery_list
 
     """
@@ -255,7 +255,7 @@ class BatteryData(models.Model):
         battery_data_list = BatteryData.objects.filter(package=package_name, version=version)
         result_battery_list = []
         for battery_data in battery_data_list:
-            result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.testvalue])
+            result_battery_list.append([battery_data.uid, battery_data.appPackageName, battery_data.testvalue, battery_data.detailInfo])
         return result_battery_list
 
 

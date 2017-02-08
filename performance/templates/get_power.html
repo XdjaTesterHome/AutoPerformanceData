@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block bodycontent %}
-    <script>
+    <script xmlns:text-align="http://www.w3.org/1999/xhtml" xmlns:text-align="http://www.w3.org/1999/xhtml">
 
         function renderData() {
             var package_name = localStorage.getItem("package_name");
@@ -12,6 +12,11 @@
                 for (var i = 0; i < powerList.length; i++) {
                     xdata.push(powerList[i][1]);
                     ydata.push(powerList[i][2]);
+                    if (powerList[i][3] != null){
+                        var result = powerList[i][3];
+                        var child = document.getElementById("detail_content");
+                        child.innerText= result;
+                    }
                 }
 
                 var option = {
@@ -38,7 +43,7 @@
                     grid: {
                         left: '3%',
                         right: '4%',
-                        bottom: '3%',
+                        bottom: '35%',
                         containLabel: true
                     },
                     xAxis: [
@@ -47,6 +52,15 @@
                             data: xdata,
                             axisTick: {
                                 alignWithLabel: true
+                            },
+                            axisLabel:{
+                                interval:0,
+                                rotate:45,
+                                margin:2,
+                                textStyle:{
+                                    fontWeight:"bolder",
+                                    color:"#000000"
+                                }
                             }
                         }
                     ],
@@ -54,7 +68,7 @@
                         {
                             type: 'value',
                             axisLabel: {
-                                formatter: '{value} ms'
+                                formatter: '{value} mAh'
                             }
                         }
                     ],
@@ -71,7 +85,7 @@
                 myChart.setOption(option);
             });
         }
-
+        
         renderData();
     </script>
     <div class="panel-body">
@@ -81,5 +95,9 @@
 
         <p><strong>拔掉usb测试之前，要执行 adb shell dumpsys batterystats --reset来清空之前的测试数据</strong></p>
     </div>
-    <div id="battery_chart" style="width: 70%;height: 400px; margin: 0 auto; background-color: #a6e1ec"></div>
+    <div id="battery_chart" style="width: 70%;height: 600px; margin: 0 auto;"></div>
+    <div id="battery_detail" style="width: 70%; height: 600px; margin: 0 auto;">
+        <h3 id = "detail_info">各个应用耗电详情</h3>
+        <h4 id= "detail_content" align="left" style="color: #2b542c"></h4>
+    </div>
 {% endblock %}
