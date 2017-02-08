@@ -7,11 +7,11 @@
             $.get('/performance/getsilencecpudata/' + package_name + '/' + version_name).done(function (data) {
                 var cpuList = data["cpu_list"];
                 var tips = null;
+                tips = document.getElementById('cpu_no_data');
                 if (cpuList.length < 1) {
-                    tips = document.getElementById('cpu_no_data');
-                    tips.show();
+                    tips.style.display = "inline";
                 } else {
-                    tips.hide();
+                    tips.style.display = "none";
                 }
 
                 var ydata = [];
@@ -113,11 +113,11 @@
             $.get('/performance/getsilenceflowdata/' + package_name + '/' + version_name).done(function (data) {
                 var flowList = data["flow_list"];
                 var tips = null;
+                tips = document.getElementById('flow_no_data');
                 if (flowList.length < 1) {
-                    tips = document.getElementById('flow_no_data');
-                    tips.show();
+                    tips.style.display = "inline";
                 } else {
-                    tips.hide();
+                    tips.style.display = "none";
                 }
                 var xdata = [];
                 for (var i = 0; i < flowList.length; i++) {
