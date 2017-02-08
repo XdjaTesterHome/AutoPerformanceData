@@ -1,25 +1,79 @@
 {% extends "base.html" %}
 {% block bodycontent %}
     <script>
-        function add() {
+
+        function renderData() {
             var package_name = localStorage.getItem("package_name");
             var version_name = localStorage.getItem("version");
             $.get('/performance/getPowerData/' + package_name + '/' + version_name).done(function (data) {
-                var Power_list = data["battery_list"];
-                var tbl = document.getElementById("tad");
-                for (var i = 0; i < Power_list.length; i++) {
-                    var obj = tbl.insertRow(tbl.rows.length);
-                    for (var k = 0; k < Power_list[i].length; k++) {
-                        obj.insertCell().innerHTML = Power_list[i][k];
-                    }
+                var powerList = data["battery_list"];
+                var xdata = [];
+                var ydata = [];
+                for (var i = 0; i < powerList.length; i++) {
+                    xdata.push(powerList[i][1]);
+                    ydata.push(powerList[i][2]);
                 }
-                var rows = tbl.getElementsByTagName("tr");
-                rows[0].style.fontWeight = "bold";//加粗表头th字体
+
+                var option = {
+                    title: {
+                        text: '整机电量消耗统计'
+                    },
+                    color: ['#3398DB'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: xdata,
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                formatter: '{value} ms'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '整机电量消耗统计',
+                            type: 'bar',
+                            barWidth: '60%',
+                            data: ydata
+                        }
+                    ]
+                };
+                var myChart = echarts.init(document.getElementById('battery_chart'));
+                myChart.setOption(option);
             });
         }
-        add()
+
+        renderData();
     </script>
-    <h1 id=></h1>
     <div class="panel-body">
         <p>耗电量测试需要拔掉usb之后，执行自己的测试用例，一段时间后再连接usb收集电量数据</p>
 
@@ -27,8 +81,5 @@
 
         <p><strong>拔掉usb测试之前，要执行 adb shell dumpsys batterystats --reset来清空之前的测试数据</strong></p>
     </div>
-    <div style="position:relative;left:50px">
-        <table width="60%" border="1px" id="tad" align="center">
-        </table>
-    </div>
+    <div id="battery_chart" style="width: 70%;height: 400px; margin: 0 auto; background-color: #a6e1ec"></div>
 {% endblock %}
