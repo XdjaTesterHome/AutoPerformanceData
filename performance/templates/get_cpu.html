@@ -6,6 +6,7 @@
             var version_name = localStorage.getItem("version");
             $.get('/performance/getCpuData/' + package_name + '/' + version_name).done(function (data) {
                 var cpuList = data['cpu_list'];
+{#                var cpuList2 = ["26","21","17","13","20","10","3"];//测试#}
                 var ydata = [];
                 var xdata = [];
                 for (var i = 0; i < cpuList.length; i++) {
@@ -79,6 +80,7 @@
                                 }
                                 return d;
                             })(),
+
                             markLine: {
                                 data: [{
                                     name: '不能超过这个cpu值',
@@ -89,6 +91,9 @@
                                 }]
                             }
                         }
+
+
+
                     ]
                 };
 
@@ -100,5 +105,5 @@
         }
         data_render();
     </script>
-    <div id="cpu_chart" style="width: 70%;height: 400px; margin: 0 auto"></div>
+    <div id="cpu_chart" style="width: 80%;height: 400px; margin: 0 auto"></div>
 {% endblock %}
