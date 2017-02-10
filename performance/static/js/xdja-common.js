@@ -2,9 +2,35 @@
  * Created by zlw on 2016/12/2.
  */
 
+
+var m = [[],[],[],[]]; //定义全局变量，并初始化为空数组。
+var verchecked0, verchecked1, verchecked2,verchecked3;
+var verchecked=[];
+var i;
+/**
+ * vercheck用于记录当前版本是否被选中
+ */
+function vercheck(verchecked,i,xx){
+    verchecked0 = document.getElementById("version0");
+    verchecked1 = document.getElementById("version1");
+    verchecked2 = document.getElementById("version2");
+    verchecked3 = document.getElementById("version3");
+
+    verchecked = [verchecked0,verchecked1,verchecked2,verchecked3];
+    for(var j=0;j < 4;j++){
+        if(j ==i){
+            verchecked[j].checked=xx;
+        }else{
+            // verchecked[j].checked=false;
+        }
+    }
+    return verchecked;
+}
+
 /**
  * 点击选择包名的按钮
  */
+
 function choosepkg() {
     $("#choose_package_content").empty();
     $.getJSON(
@@ -58,13 +84,17 @@ function choosepkg() {
     );
 }
 
+/**
+ * 点击选择版本号的监控方法
+ */
 function chooseVersion() {
     $("#choose_version_content").empty();
     var package_name = localStorage.getItem("package_name");
     $.getJSON('/performance/getVersion/' + package_name + '/', function (data) {
         $.each(data['version_list'], function (i, val) {
+            i = i;//全局变量赋值
             var li = document.createElement("li");
-            li.setAttribute("id", "version" + i);
+            li.setAttribute("id", "version" + i+6);
             li.innerHTML = val;
             li.onclick = function () {
                 $("#version_value").text(this.innerHTML).append('<b class="caret"></b>');
@@ -74,38 +104,29 @@ function chooseVersion() {
                 // window.global_package_name = this.innerHTML
                 window.location.reload();
             };
+
             var checkBox = document.createElement("input");
             checkBox.setAttribute("type", "checkbox");
             checkBox.setAttribute("id", 'version' + i);
-            checkBox.onclick = function () {
-                checkboxOnclick(this)
-            };
-            function checkboxOnclick(checkBox) {
-                if (checkBox.checked == true) {
-                    console.log(i);
-                    console.log(li.innerHTML);
-                    var version = li.innerHTML;
-                    var cpuList = [];
-                    $.get('/performance/getCpuData/' + package_name + '/' + version).done(function (data) {
-                        cpuList = data['cpu_list'];
-                        data_render(cpuList, i);
-                    });
-
-                    //Action for checked
-                } else {
-
-                    cpuList = [];
-                    data_render(cpuList, i);
-                    //Action for not checked
+            if(verchecked.length>0){
+                if (verchecked[i].checked ==true){
+                checkBox.setAttribute("checked",'checked');
                 }
             }
 
 
+            checkBox.onclick = function () {
+                checkboxOnclick(this,i,package_name,li);//解决办法是以参数形式传递
+            };
+
+
             $("#choose_version_content").append(li).append(checkBox).append('<li class="divider" float="left";></li>');
         });
-
     });
+
 }
+
+
 function loadData() {
     $('a').css("color", "white");
     var package_name = localStorage.getItem("package_name");
@@ -117,75 +138,43 @@ function loadData() {
 }
 
 
-function data_render(cpuList, i) {
-    console.log('测试');
-    var cpuList = cpuList;
-    var ydata = [];
-    var xdata = [];
-    for (var i = 0; i < cpuList.length; i++) {
-        xdata.push(i);
-        var mdata = cpuList[i][cpuList[i].length - 1];
-        if (isNaN(mdata)) {
-            mdata = 0
+
+
+/**
+ * 根据版本号和包名，处理得到的CPUJSON数据
+ */
+function handedata(arrdata){
+    var d = [];
+    for (var i = 0; i < arrdata.length; i++) {
+        var value = arrdata[i][1];
+        if (isNaN(value)) {
+            value = 0;
         }
-        ydata.push(mdata);
+        d.push(value)
     }
+    return d;
 
-    var option = {
-        title: {
-            text: 'Cpu使用情况'
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: function (params) {
-                return params.value[2] + '<br/>' + "cpu占有率：" + params.value[1];
-            }
-        },
-        toolbox: {
-            show: true,
-            feature: {
-                mark: {show: true},
-                dataView: {show: true, readOnly: false},
-                magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                restore: {show: true},
-                saveAsImage: {show: true}
-            }
-        },
-        legend: {
-            data: ['cpu占有率']
-        },
-        grid: {
-            y2: 80
-        },
-        xAxis: [
-            {
-                type: 'category',
-                boundaryGap: false,
-                data: xdata
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value} %'
-                }
-            }
-        ],
-        series: [
-            {
-                name: i,
-                type: 'line',
-                showAllSymbol: true,
-                data: cpuList
-            },
+}
 
-        ]
+function allcheck(m,i,list,option,chart){
+    m[i]= list;
+    var Series = [];
+    var Item = function() {
+        return {
+            name: '',
+            type: 'line',
+            showAllSymbol: true,
+            data: []
+        }
     };
-
-    // 设置chart
-    var myChart = echarts.init(document.getElementById('cpu_chart'));
-
-    myChart.setOption(option)
-
+    for(var j=0;j < 4;j++){
+            var it = new Item();
+            it.name = j;
+            it.data = m[j];
+            Series.push(it);
+        }
+    var myChart = echarts.init(document.getElementById(chart));
+    option.series = Series; // 设置图表
+    myChart.setOption(option);// 重新加载图表
+    return m;
 }

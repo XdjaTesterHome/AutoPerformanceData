@@ -1,6 +1,91 @@
 {% extends "base.html" %}
 {% block bodycontent %}
     <script>
+        function data_rend(flowList,i) {
+            var flowList = flowList;
+                var ydata = [];
+                var xdata = [];
+                for (var i = 0; i < flowList.length; i++) {
+                    xdata.push(i);
+                    var mdata = flowList[i][flowList[i].length - 1];
+                    if (isNaN(mdata)) {
+                        mdata = 0
+                    }
+                    ydata.push(mdata);
+                }
+
+                var option = {
+                    title: {
+                        text: '流量使用情况'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.value[2] + '<br/>' + "消耗流量：" + params.value[1];
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    legend: {
+                        data: ['流量使用情况']
+                    },
+                    grid: {
+                        y2: 80
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: xdata
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel:{
+                                formatter:'{value} KB'
+                            }
+                        }
+                    ],
+                    series: [
+                    ]
+                };
+                return option;
+        }
+
+        function checkboxOnclick(checkBox,i,package_name,li) {
+
+                if (checkBox.checked == true) {
+                    var version = li.innerHTML;
+                    var dataList;
+                    $.get("/performance/getFlowData/" + package_name + "/" + version).done(function (data) {
+                    dataList=data['flow_list'];
+                    dataList = handedata(dataList);
+                    var option = data_rend(dataList, i);
+                    m =allcheck(m,i,dataList,option,'flow_chart');
+                    verchecked = vercheck(verchecked,i,true);
+                    });
+
+
+                    //Action for checked
+                } else {
+                    verchecked = vercheck(verchecked,i,false);
+                    dataList = [];
+                    var option = data_rend(dataList, i);
+                    m =allcheck(m,i,dataList,option,'flow_chart');
+                    //Action for not checked
+                }
+            }
+
+
         function data_render() {
             var package_name = localStorage.getItem("package_name");
             var version_name = localStorage.getItem("version");

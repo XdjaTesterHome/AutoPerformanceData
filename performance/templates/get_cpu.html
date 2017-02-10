@@ -1,12 +1,96 @@
 {% extends "base.html" %}
 {% block bodycontent %}
     <script>
+    function data_rend(cpuList, i) {
+            var cpuList = cpuList;
+            var ydata = [];
+            var xdata = [];
+            for (var i = 0; i < cpuList.length; i++) {
+                xdata.push(i);
+                var mdata = cpuList[i][cpuList[i].length - 1];
+                if (isNaN(mdata)) {
+                    mdata = 0
+                }
+                ydata.push(mdata);
+            }
+
+    var option = {
+        title: {
+            text: 'Cpu使用情况'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: function (params) {
+                return params.value[2] + '<br/>' + "cpu占有率：" + params.value[1];
+            }
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: {show: true},
+                dataView: {show: true, readOnly: false},
+                magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        legend: {
+            data: ['cpu占有率']
+        },
+        grid: {
+            y2: 80
+        },
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data: xdata
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} %'
+                }
+            }
+        ],
+        series: [
+         ]
+    };
+    return option;
+}
+
+        function checkboxOnclick(checkBox,i,package_name,li) {
+
+                if (checkBox.checked == true) {
+                    var version = li.innerHTML;
+                    var dataList;
+                    $.get("/performance/getCpuData/" + package_name + "/" + version).done(function (data) {
+                    dataList=data['cpu_list'];
+                    dataList = handedata(dataList);
+                    var option = data_rend(dataList, i);
+                    m =allcheck(m,i,dataList,option,'cpu_chart');
+                    verchecked = vercheck(verchecked,i,true);
+                    });
+
+
+                    //Action for checked
+                } else {
+                    verchecked = vercheck(verchecked,i,false);
+                    dataList = [];
+                    var option = data_rend(dataList, i);
+                    m =allcheck(m,i,dataList,option,'cpu_chart');
+                    //Action for not checked
+                }
+            }
+
+
         function data_render() {
             var package_name = localStorage.getItem("package_name");
             var version_name = localStorage.getItem("version");
             $.get('/performance/getCpuData/' + package_name + '/' + version_name).done(function (data) {
                 var cpuList = data['cpu_list'];
-{#                var cpuList2 = ["26","21","17","13","20","10","3"];//测试#}
                 var ydata = [];
                 var xdata = [];
                 for (var i = 0; i < cpuList.length; i++) {
@@ -38,10 +122,6 @@
                             saveAsImage: {show: true}
                         }
                     },
-                    {#                    dataZoom: {#}
-                    {#                        show: true,#}
-                    {#                        start: 70#}
-                    {#                    },#}
                     legend: {
                         data: ['cpu占有率']
                     },
